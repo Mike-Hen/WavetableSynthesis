@@ -4,3 +4,4 @@ The main aim of this project is to create a synthesiser VST plugin using C++ and
 
 For more info on current status and details on each part of the synth, please see the wiki.
 
+https://github.com/Mike-Hen/WavetableSynthesis.wiki.git
