@@ -9,6 +9,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
+//==============================================================================
 
 class Distortion : public Component,
     public Button::Listener
@@ -22,6 +23,7 @@ public:
 
     void buttonClicked(Button* button) override;
 
+    // Create components objects
     Slider inputGainSlider;
     Slider outputGainSlider;
     Slider dryWetSlider;

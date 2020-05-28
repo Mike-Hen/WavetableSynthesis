@@ -20,6 +20,7 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
 #endif
     )
     , tree(*this, nullptr, "PARAMETERS",
+        // Processor tree for tracking GUI values
         {    
             // ADSR
             std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
@@ -171,6 +172,7 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     for (int i = 0; i < mySynth.getNumVoices(); i++)
     {
         if ((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i))))
+        // Collect GUI values from processor tree
         {
             myVoice->setVoiceSampleRate(lastSampleRate);
             myVoice->setADSRSampleRate( lastSampleRate);

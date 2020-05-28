@@ -10,13 +10,14 @@
 #include "SynthSound.h"
 #include "Filtered.h"
 
+//==============================================================================
+
 class SynthVoice : public SynthesiserVoice
 {
 public:
     SynthVoice()
     {
     //===== Setup Waveforms =====//
-
         // Sine
         for (int i = 0; i < wtSize; i++)
         {

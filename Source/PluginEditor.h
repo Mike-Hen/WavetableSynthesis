@@ -4,6 +4,7 @@
     Author:  MHENDER4
   ==============================================================================
 */
+
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -14,8 +15,7 @@
 #include "Distortion.h"
 
 //==============================================================================
-/**
-*/
+
 class Wsynth_v1AudioProcessorEditor  : public AudioProcessorEditor,
     public Button::Listener
 {
@@ -23,13 +23,16 @@ public:
     Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor&);
     ~Wsynth_v1AudioProcessorEditor();
 
-    //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
 
 private:
+    Wsynth_v1AudioProcessor& processor;
+
+    // Master gain
     Slider masterGainSlider;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> masterGainVal;
+    Label volumeLabel;
 
     // Filter values
     ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> filt1OnOffVal;
@@ -57,11 +60,6 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> sustainVal;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> releaseVal;
 
-    Label volumeLabel;
-    Wsynth_v1AudioProcessor& processor;
-
-    void buttonClicked(Button* button) override;
-
     // Create synth components
     Filter filt1;
     Filter filt2;
@@ -70,13 +68,15 @@ private:
     Envelope envGui;
 
     // Create ADSR presets
-    TextButton reg1;
-    TextButton reg2;
-    TextButton reg3;
-    TextButton reg4;
-    TextButton reg5;
-    TextButton reg6;
-    TextButton reg7;
+    TextButton presetADSR1;
+    TextButton presetADSR2;
+    TextButton presetADSR3;
+    TextButton presetADSR4;
+    TextButton presetADSR5;
+    TextButton presetADSR6;
+    TextButton presetADSR7;
+    
+    void buttonClicked(Button* button) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Wsynth_v1AudioProcessorEditor)
 };

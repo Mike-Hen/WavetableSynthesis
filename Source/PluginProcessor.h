@@ -4,20 +4,21 @@
     Author:  MHENDER4
   ==============================================================================
 */
+
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SynthSound.h"
 #include "SynthVoice.h"
 
+//==============================================================================
+
 class Wsynth_v1AudioProcessor  :    public AudioProcessor
 {
 public:
 
-    //==============================================================================
     Wsynth_v1AudioProcessor();
     ~Wsynth_v1AudioProcessor();
 
-    //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 

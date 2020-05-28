@@ -13,8 +13,6 @@
       <FILE id="rDkJPe" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
       <FILE id="tB7mRB" name="Filtered.cpp" compile="1" resource="0" file="Source/Filtered.cpp"/>
       <FILE id="apaety" name="Filtered.h" compile="0" resource="0" file="Source/Filtered.h"/>
-      <FILE id="t5M9Ac" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
-      <FILE id="ovDl2w" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
       <FILE id="Ed53eW" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
       <FILE id="Zb7Kd3" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
       <FILE id="ZCVNZM" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>

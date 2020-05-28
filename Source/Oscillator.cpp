@@ -11,8 +11,10 @@
 //==============================================================================
 Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
 {
+    // Set component size
     setSize(350, 300);
 
+    // Design wavetable slider
     osc1WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     osc1WtSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc1WtSlider.setTextBoxIsEditable(true);
@@ -22,6 +24,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1WtSlider.setTextValueSuffix(" colour");
     addAndMakeVisible(&osc1WtSlider);
 
+    // Design wavetable slider
     osc2WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     osc2WtSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2WtSlider.setTextBoxIsEditable(true);
@@ -31,6 +34,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2WtSlider.setTextValueSuffix(" colour");
     addAndMakeVisible(&osc2WtSlider);
 
+    // Design gain slider
     osc1GainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     osc1GainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc1GainSlider.setTextBoxIsEditable(true);
@@ -40,6 +44,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1GainSlider.setTextValueSuffix(" dB");
     addAndMakeVisible(&osc1GainSlider);
 
+    // Design gain slider
     osc2GainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     osc2GainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2GainSlider.setTextBoxIsEditable(true);
@@ -49,6 +54,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2GainSlider.setTextValueSuffix(" dB");
     addAndMakeVisible(&osc2GainSlider);
 
+    // Design pitch slider
     osc1PitchSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
     osc1PitchSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc1PitchSlider.setTextBoxIsEditable(true);
@@ -57,6 +63,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1PitchSlider.setValue(1.0);
     addAndMakeVisible(&osc1PitchSlider);
 
+    // Design pitch slider
     osc2PitchSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
     osc2PitchSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2PitchSlider.setTextBoxIsEditable(true);
@@ -65,7 +72,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2PitchSlider.setValue(1.0);
     addAndMakeVisible(&osc2PitchSlider);
     
-    //===== COMBO BOX FOR WAVEFORM =====//
+    // Combo box for waveform
     //String wave1 = "sine";
     //String wave2 = "square";
     //String wave3 = "sawtooth";
@@ -93,8 +100,6 @@ void Oscillator::paint(Graphics& g)
     juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
 
     g.fillAll(Colours::black);
-    //g.setColour(Colours::white);
-    //g.drawText("Oscillator", titleArea, Justification::centredTop);
 
     juce::Rectangle <float> area(0, 0, 400, 400);
 

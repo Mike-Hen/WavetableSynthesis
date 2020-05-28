@@ -4,6 +4,7 @@
     Author:  MHENDER4
   ==============================================================================
 */
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -11,12 +12,9 @@
 Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (1000, 500);
+    setSize (1000, 500); // Set synth size
 
-    //===== Setup Master =====//
-
+    //===== Master gain =====//
     masterGainSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
     masterGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 25);
     masterGainSlider.setTextBoxIsEditable(true);
@@ -26,66 +24,64 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     masterGainSlider.setTextValueSuffix(" dB");
     addAndMakeVisible(masterGainSlider);
 
-    //===== Setup Reg =====//
+    //===== Setup ADSR presets =====//
+    presetADSR1.setSize(80, 70);
+    presetADSR1.setClickingTogglesState(false);
+    presetADSR1.setButtonText("presetADSR1");
+    presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+    presetADSR1.addListener(this);
+    addAndMakeVisible(presetADSR1);
 
-    reg1.setSize(80, 70);
-    reg1.setClickingTogglesState(false);
-    reg1.setButtonText("reg1");
-    reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-    reg1.addListener(this);
-    addAndMakeVisible(reg1);
+    presetADSR2.setSize(80, 70);
+    presetADSR2.setClickingTogglesState(false);
+    presetADSR2.setButtonText("presetADSR2");
+    presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR2.addListener(this);
+    addAndMakeVisible(presetADSR2);
 
-    reg2.setSize(80, 70);
-    reg2.setClickingTogglesState(false);
-    reg2.setButtonText("reg2");
-    reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg2.addListener(this);
-    addAndMakeVisible(reg2);
+    presetADSR3.setSize(80, 70);
+    presetADSR3.setClickingTogglesState(false);
+    presetADSR3.setButtonText("presetADSR3");
+    presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR3.addListener(this);
+    addAndMakeVisible(presetADSR3);
 
-    reg3.setSize(80, 70);
-    reg3.setClickingTogglesState(false);
-    reg3.setButtonText("reg3");
-    reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg3.addListener(this);
-    addAndMakeVisible(reg3);
+    presetADSR4.setSize(80, 70);
+    presetADSR4.setClickingTogglesState(false);
+    presetADSR4.setButtonText("presetADSR4");
+    presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR4.addListener(this);
+    addAndMakeVisible(presetADSR4);
 
-    reg4.setSize(80, 70);
-    reg4.setClickingTogglesState(false);
-    reg4.setButtonText("reg4");
-    reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg4.addListener(this);
-    addAndMakeVisible(reg4);
+    presetADSR5.setSize(80, 70);
+    presetADSR5.setClickingTogglesState(false);
+    presetADSR5.setButtonText("presetADSR5");
+    presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR5.addListener(this);
+    addAndMakeVisible(presetADSR5);
 
-    reg5.setSize(80, 70);
-    reg5.setClickingTogglesState(false);
-    reg5.setButtonText("reg5");
-    reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg5.addListener(this);
-    addAndMakeVisible(reg5);
+    presetADSR6.setSize(80, 70);
+    presetADSR6.setClickingTogglesState(false);
+    presetADSR6.setButtonText("presetADSR6");
+    presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR6.addListener(this);
+    addAndMakeVisible(presetADSR6);
 
-    reg6.setSize(80, 70);
-    reg6.setClickingTogglesState(false);
-    reg6.setButtonText("reg6");
-    reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg6.addListener(this);
-    addAndMakeVisible(reg6);
+    presetADSR7.setSize(80, 70);
+    presetADSR7.setClickingTogglesState(false);
+    presetADSR7.setButtonText("presetADSR7");
+    presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+    presetADSR7.addListener(this);
+    addAndMakeVisible(presetADSR7);
 
-    reg7.setSize(80, 70);
-    reg7.setClickingTogglesState(false);
-    reg7.setButtonText("reg7");
-    reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-    reg7.addListener(this);
-    addAndMakeVisible(reg7);
-
-    //====== Add Components =====//
-
+    //====== Add components =====//
     addAndMakeVisible(&envGui);
     addAndMakeVisible(&oscGui);
     addAndMakeVisible(&filt1);
     addAndMakeVisible(&filt2);
     addAndMakeVisible(&dist1);
 
-    //===== Tracking GUI =====//
+    //===== Tracking GUI values =====//
 
     // Master
     masterGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "mastergain", masterGainSlider);
@@ -121,90 +117,91 @@ Wsynth_v1AudioProcessorEditor::~Wsynth_v1AudioProcessorEditor()
 {
 }
 
+//==== Tracking ADSR preset buttons ====//
 void Wsynth_v1AudioProcessorEditor::buttonClicked(Button* button)
 {
-    if (reg1.isMouseOver() == true)
+    if (presetADSR1.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(0.0f, 0.3f, 0.1f, 0.0f);
     }
-    if (reg2.isMouseOver() == true)
+    if (presetADSR2.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(0.8f, 0.6f, 0.2f, 0.8f);
     }
-    if (reg3.isMouseOver() == true)
+    if (presetADSR3.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(1.6f, 0.9f, 0.3f, 1.6f);
     }
-    if (reg4.isMouseOver() == true)
+    if (presetADSR4.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(2.4f, 1.2f, 0.4f, 2.4f);
     }
-    if (reg5.isMouseOver() == true)
+    if (presetADSR5.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(3.2f, 1.5f, 0.5f, 3.2f);
     }
-    if (reg6.isMouseOver() == true)
+    if (presetADSR6.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
         envGui.setADSRValues(4.0f, 1.7f, 0.8f, 4.0f);
     }
-    if (reg7.isMouseOver() == true)
+    if (presetADSR7.isMouseOver() == true)
     {
-        reg1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
-        reg7.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
+        presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR2.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR3.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR4.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR5.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR6.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
+        presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
         envGui.setADSRValues(5.0f, 2.0f, 1.0f, 5.0f);
     }
 }
 
-//==============================================================================
 void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
 {
+    // Set background
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.fillAll(Colours::black);
     g.setColour(Colours::white);
@@ -220,6 +217,7 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
 
 void Wsynth_v1AudioProcessorEditor::resized()
 {
+    // Position components
     masterGainSlider.setBounds(getWidth() - 100, 25, 75, 100);
     oscGui.setBounds(10,10, 170, 340);
     envGui.setBounds(getWidth() - 160, 320, 150, 150);
@@ -227,11 +225,12 @@ void Wsynth_v1AudioProcessorEditor::resized()
     filt2.setBounds(530, 10, 250, 200);
     dist1.setBounds(190, 10, 240, 170);
 
-    reg1.setBounds(250, 370, 80, 70);
-    reg2.setBounds(330, 370, 80, 70);
-    reg3.setBounds(410, 370, 80, 70);
-    reg4.setBounds(490, 370, 80, 70);
-    reg5.setBounds(570, 370, 80, 70);
-    reg6.setBounds(650, 370, 80, 70);
-    reg7.setBounds(730, 370, 80, 70);
+    // Position ADSR presets
+    presetADSR1.setBounds(250, 370, 80, 70);
+    presetADSR2.setBounds(330, 370, 80, 70);
+    presetADSR3.setBounds(410, 370, 80, 70);
+    presetADSR4.setBounds(490, 370, 80, 70);
+    presetADSR5.setBounds(570, 370, 80, 70);
+    presetADSR6.setBounds(650, 370, 80, 70);
+    presetADSR7.setBounds(730, 370, 80, 70);
 }

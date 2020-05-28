@@ -11,8 +11,7 @@
 #include "PluginProcessor.h"
 
 //==============================================================================
-/*
-*/
+
 class Envelope : public Component
 {
 public:
@@ -23,6 +22,7 @@ public:
     void resized() override;
     void setADSRValues(float attack, float decay, float sustain, float release);
 
+    // ADSR Sliders
     Slider attackSlider;
     Slider decaySlider;
     Slider sustainSlider;
