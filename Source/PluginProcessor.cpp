@@ -1,53 +1,60 @@
+/*
+  ==============================================================================
+    PluginProcessor.cpp
+    Author:  MHENDER4
+  ==============================================================================
+*/
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
 //==============================================================================
 Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-	: AudioProcessor(BusesProperties()
+    : AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
-		.withInput("Input", AudioChannelSet::stereo(), true)
+        .withInput("Input", AudioChannelSet::stereo(), true)
 #endif
-		.withOutput("Output", AudioChannelSet::stereo(), true)
+        .withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-	)
-	, tree(*this, nullptr, "PARAMETERS",
-		{	
-			// ADSR
-			std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
-			std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.1f, 2.0f), 0.8f),
-			std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.1f, 1.0f), 0.8f),
-			std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
-			// Gain
-			std::make_unique<AudioParameterFloat>("mastergain", "MasterGain", -60.0f, 0.0f, -12.0f),
-			// Oscillators
-			std::make_unique<AudioParameterFloat>("osc1wt", "Osc1Wt", 0.0f, 300.0f, 0.0f),
-			std::make_unique<AudioParameterFloat>("osc1gain", "Osc1Gain",  -60.0f, 0.0f, -12.0f),
-			std::make_unique<AudioParameterFloat>("osc1pitch", "Osc1Pitch", 0.0f, 10.0f, 1.0f),
-			std::make_unique<AudioParameterFloat>("osc2wt", "Osc2Wt", 0.0f, 300.0f, 0.0f),
-			std::make_unique<AudioParameterFloat>("osc2gain", "Osc2Gain",  -60.0f, 0.0f, -60.0f),
-			std::make_unique<AudioParameterFloat>("osc2pitch", "Osc2Pitch",  0.0f, 10.0f, 1.0f),
-			// Filters
-			std::make_unique<AudioParameterFloat>("filt1cutoff", "Filt1Cutoff",  0.1f, 1.0f, 1.0f),
-			std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
+    )
+    , tree(*this, nullptr, "PARAMETERS",
+        {    
+            // ADSR
+            std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
+            std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.1f, 2.0f), 0.8f),
+            std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.1f, 1.0f), 0.8f),
+            std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
+            // Gain
+            std::make_unique<AudioParameterFloat>("mastergain", "MasterGain", -60.0f, 0.0f, -12.0f),
+            // Oscillators
+            std::make_unique<AudioParameterFloat>("osc1wt", "Osc1Wt", 0.0f, 300.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("osc1gain", "Osc1Gain",  -60.0f, 0.0f, -12.0f),
+            std::make_unique<AudioParameterFloat>("osc1pitch", "Osc1Pitch", 0.0f, 10.0f, 1.0f),
+            std::make_unique<AudioParameterFloat>("osc2wt", "Osc2Wt", 0.0f, 300.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("osc2gain", "Osc2Gain",  -60.0f, 0.0f, -60.0f),
+            std::make_unique<AudioParameterFloat>("osc2pitch", "Osc2Pitch",  0.0f, 10.0f, 1.0f),
+            // Filters
+            std::make_unique<AudioParameterFloat>("filt1cutoff", "Filt1Cutoff",  0.1f, 1.0f, 1.0f),
+            std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
 
-			std::make_unique<AudioParameterBool>("dist1onoff", "Dist1OnOff", false),
-			std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -20.0f, 20.0f, 0.0f),
-			std::make_unique<AudioParameterFloat>("dist1outputgain", "Dist1OutputGain",  -20.0f, 20.0f, 0.0f),
-			std::make_unique<AudioParameterFloat>("dist1drywet", "Dist1DryWet",  0.0f, 100.0f, 0.0f),
-		})
+            std::make_unique<AudioParameterBool>("dist1onoff", "Dist1OnOff", false),
+            std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -20.0f, 20.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("dist1outputgain", "Dist1OutputGain",  -20.0f, 20.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("dist1drywet", "Dist1DryWet",  0.0f, 100.0f, 0.0f),
+        })
 #endif
 {
-	mySynth.clearVoices();
+    mySynth.clearVoices();
 
-	for (int i = 0; i < 5; i++)
-	{
-		mySynth.addVoice(new SynthVoice());
-	}
+    for (int i = 0; i < 5; i++)
+    {
+        mySynth.addVoice(new SynthVoice());
+    }
 
-	mySynth.clearSounds();
-	mySynth.addSound(new SynthSound());
+    mySynth.clearSounds();
+    mySynth.addSound(new SynthSound());
 }
 
 Wsynth_v1AudioProcessor::~Wsynth_v1AudioProcessor()
@@ -119,31 +126,11 @@ void Wsynth_v1AudioProcessor::changeProgramName (int index, const String& newNam
 //==============================================================================
 void Wsynth_v1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-	ignoreUnused(samplesPerBlock);
-	lastSampleRate = sampleRate;
-	mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
-	myVoice->prepare(samplesPerBlock, sampleRate, 2);
-	//overSamp.initProcessing(samplesPerBlock);
-	////createFilters();
-	//alias1Filt.reset();
-	//alias2Filt.reset();
-	//gibbs1Filt.reset();
-	//gibbs2Filt.reset();
-	//struct dsp::ProcessSpec aliasSpec { sampleRate * overSampleVal, 512 * overSampleVal, 1 };
-	//alias1Filt.prepare(aliasSpec);
-	//alias2Filt.prepare(aliasSpec);
-	//gibbs1Filt.prepare(aliasSpec);
-	//gibbs2Filt.prepare(aliasSpec);
+    ignoreUnused(samplesPerBlock);
+    lastSampleRate = sampleRate;
+    mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
+    myVoice->prepare(samplesPerBlock, sampleRate, 2);
 }
-
-//void Wsynth_v1AudioProcessor::createFilters()
-//{
-//	juce::dsp::FIR::Filter<float> alias1Filt
-//	{ dsp::FilterDesign<float>::designFIRLowpassWindowMethod(lastSampleRate / 2, lastSampleRate * overSampleVal, 121, dsp::WindowingFunction<float>::blackman) };
-//	juce::dsp::FIR::Filter<float> alias2Filt
-//	{ dsp::FilterDesign<float>::designFIRLowpassWindowMethod(lastSampleRate / 2, lastSampleRate * overSampleVal, 121, dsp::WindowingFunction<float>::blackman) };
-//
-//}
 
 void Wsynth_v1AudioProcessor::releaseResources()
 {
@@ -181,43 +168,40 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-	for (int i = 0; i < mySynth.getNumVoices(); i++)
-	{
-		if ((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i))))
-		{
-			myVoice->setVoiceSampleRate(lastSampleRate);
-			myVoice->setADSRSampleRate( lastSampleRate);
-			myVoice->getEnvelopeParams(	tree.getRawParameterValue("attack"),
-										tree.getRawParameterValue("decay"),
-										tree.getRawParameterValue("sustain"),
-										tree.getRawParameterValue("release"));
-			myVoice->getMasterGain(tree.getRawParameterValue("mastergain"));
-			myVoice->getOsc1(	tree.getRawParameterValue("osc1gain"), 
-								tree.getRawParameterValue("osc1wt"), 
-								tree.getRawParameterValue("osc1pitch"));
-			myVoice->getOsc2(	tree.getRawParameterValue("osc2gain"), 
-								tree.getRawParameterValue("osc2wt"), 
-								tree.getRawParameterValue("osc2pitch"));
-			myVoice->getFilt1(	tree.getRawParameterValue("filt1cutoff"));
-			myVoice->getFilt2(	tree.getRawParameterValue("filt2cutoff"));
-			myVoice->getDist1(	tree.getRawParameterValue("dist1onoff"), 
-								tree.getRawParameterValue("dist1inputgain"),
-								tree.getRawParameterValue("dist1outputgain"), 
-								tree.getRawParameterValue("dist1drywet"));
-			
-		}
-	}
-	
-	buffer.clear();
-	mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-	//dsp::AudioBlock<float> block{ buffer };
-	//upBlock = overSamp.processSamplesUp(block); //create AB
-	//alias1Filt.process(dsp::ProcessContextReplacing <float> (upBlock.getSingleChannelBlock(0)));
-	//alias2Filt.process(dsp::ProcessContextReplacing <float> (upBlock.getSingleChannelBlock(1)));
-	//gibbs1Filt.process(dsp::ProcessContextReplacing <float> (upBlock.getSingleChannelBlock(0)));
-	//gibbs2Filt.process(dsp::ProcessContextReplacing <float> (upBlock.getSingleChannelBlock(1)));
-	//block.clear();
-	//overSamp.processSamplesDown(block);
+    for (int i = 0; i < mySynth.getNumVoices(); i++)
+    {
+        if ((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i))))
+        {
+            myVoice->setVoiceSampleRate(lastSampleRate);
+            myVoice->setADSRSampleRate( lastSampleRate);
+
+            myVoice->getEnvelopeParams( tree.getRawParameterValue("attack"),
+                                        tree.getRawParameterValue("decay"),
+                                        tree.getRawParameterValue("sustain"),
+                                        tree.getRawParameterValue("release"));
+
+            myVoice->getMasterGain(     tree.getRawParameterValue("mastergain"));
+
+            myVoice->getOsc1(           tree.getRawParameterValue("osc1gain"), 
+                                        tree.getRawParameterValue("osc1wt"), 
+                                        tree.getRawParameterValue("osc1pitch"));
+
+            myVoice->getOsc2(           tree.getRawParameterValue("osc2gain"), 
+                                        tree.getRawParameterValue("osc2wt"), 
+                                        tree.getRawParameterValue("osc2pitch"));
+            myVoice->getFilt1(          tree.getRawParameterValue("filt1cutoff"));
+
+            myVoice->getFilt2(          tree.getRawParameterValue("filt2cutoff"));
+
+            myVoice->getDist1(          tree.getRawParameterValue("dist1onoff"), 
+                                        tree.getRawParameterValue("dist1inputgain"),
+                                        tree.getRawParameterValue("dist1outputgain"), 
+                                        tree.getRawParameterValue("dist1drywet"));
+        }
+    }
+    
+    buffer.clear();
+    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================

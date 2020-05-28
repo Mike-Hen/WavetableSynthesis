@@ -1,10 +1,7 @@
 /*
   ==============================================================================
-
-	Distortion.h
-	Created: 12 Jan 2020 4:14:23pm
-	Author:  MHENDER4
-
+    Distortion.h
+    Author:  MHENDER4
   ==============================================================================
 */
 
@@ -14,24 +11,24 @@
 
 
 class Distortion : public Component,
-	public Button::Listener
+    public Button::Listener
 {
 public:
-	Distortion(Wsynth_v1AudioProcessor&);
-	~Distortion();
+    Distortion(Wsynth_v1AudioProcessor&);
+    ~Distortion();
 
-	void paint(Graphics&) override;
-	void resized() override;
+    void paint(Graphics&) override;
+    void resized() override;
 
-	void buttonClicked(Button* button) override;
+    void buttonClicked(Button* button) override;
 
-	Slider inputGainSlider;
-	Slider outputGainSlider;
-	Slider dryWetSlider;
-	TextButton distOnOff;
+    Slider inputGainSlider;
+    Slider outputGainSlider;
+    Slider dryWetSlider;
+    TextButton distOnOff;
 
 private:
-	Wsynth_v1AudioProcessor& processor;
+    Wsynth_v1AudioProcessor& processor;
 
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Distortion)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Distortion)
 };
