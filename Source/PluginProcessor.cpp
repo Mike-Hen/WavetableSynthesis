@@ -39,7 +39,7 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
             // Filters
             std::make_unique<AudioParameterFloat>("filt1cutoff", "Filt1Cutoff",  0.1f, 1.0f, 1.0f),
             std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
-
+            // Distortion
             std::make_unique<AudioParameterBool>("dist1onoff", "Dist1OnOff", false),
             std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -20.0f, 20.0f, 0.0f),
             std::make_unique<AudioParameterFloat>("dist1outputgain", "Dist1OutputGain",  -20.0f, 20.0f, 0.0f),
@@ -209,7 +209,7 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 //==============================================================================
 bool Wsynth_v1AudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return true;
 }
 
 AudioProcessorEditor* Wsynth_v1AudioProcessor::createEditor()

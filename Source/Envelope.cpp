@@ -12,7 +12,7 @@
 Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     processor(p)
 {
-    setSize(200, 160);
+    setSize(200, 160); // Set component size
 
     // Design attack slider
     attackSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
@@ -55,10 +55,8 @@ Envelope::~Envelope()
 
 void Envelope::paint(Graphics& g)
 {
-    // Set component size
+    // Create component title
     juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
-
-    // Colour & name component
     g.fillAll(Colours::black);
     g.setColour(Colours::white);
     g.drawText("Envelope", titleArea, Justification::centredTop);

@@ -22,6 +22,7 @@ public:
 
     void buttonClicked(Button* button) override;
 
+    // Create components objects
     Slider cutoffSlider;
     ComboBox filterSelect;
     TextButton filtOnOff;

@@ -57,7 +57,7 @@ public:
     //==== Synth Attributes ====//
     AudioProcessorValueTreeState tree;  // Value tree to hold synth parameter data
     double volume;                      // Main volume level
-    double lastSampleRate;              // Last sample rate held
+    double lastSampleRate;              
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Wsynth_v1AudioProcessor)

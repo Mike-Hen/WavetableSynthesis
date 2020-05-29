@@ -20,6 +20,7 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+
     void setADSRValues(float attack, float decay, float sustain, float release);
 
     // ADSR Sliders

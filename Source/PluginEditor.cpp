@@ -74,7 +74,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     presetADSR7.addListener(this);
     addAndMakeVisible(presetADSR7);
 
-    //====== Add components =====//
+    //====== Add components to GUI =====//
     addAndMakeVisible(&envGui);
     addAndMakeVisible(&oscGui);
     addAndMakeVisible(&filt1);
@@ -201,16 +201,17 @@ void Wsynth_v1AudioProcessorEditor::buttonClicked(Button* button)
 
 void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
 {
-    // Set background
+    // Create background
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.fillAll(Colours::black);
     g.setColour(Colours::white);
 
+    // Create gain descriptor
     juce::Rectangle<int> nameArea(getWidth() - 100, 15, 75, 100);
     g.drawText("Master Gain", nameArea, Justification::centredTop);
 
+    // Create synth border
     juce::Rectangle <float> area(0, 0, getWidth(), getHeight());
-
     g.setColour(Colours::darkred);
     g.drawRect(area, 4.0f);
 }
@@ -225,7 +226,7 @@ void Wsynth_v1AudioProcessorEditor::resized()
     filt2.setBounds(530, 10, 250, 200);
     dist1.setBounds(190, 10, 240, 170);
 
-    // Position ADSR presets
+    // Position ADSR preset buttons
     presetADSR1.setBounds(250, 370, 80, 70);
     presetADSR2.setBounds(330, 370, 80, 70);
     presetADSR3.setBounds(410, 370, 80, 70);

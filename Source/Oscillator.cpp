@@ -11,8 +11,7 @@
 //==============================================================================
 Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
 {
-    // Set component size
-    setSize(350, 300);
+    setSize(350, 300); // Set component size
 
     // Design wavetable slider
     osc1WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
@@ -72,22 +71,22 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2PitchSlider.setValue(1.0);
     addAndMakeVisible(&osc2PitchSlider);
     
-    // Combo box for waveform
-    //String wave1 = "sine";
-    //String wave2 = "square";
-    //String wave3 = "sawtooth";
-    //String wave4 = "triangle";
-    //waveformSelect.addItem(wave1, 1);
-    //waveformSelect.addItem(wave2, 2);
-    //waveformSelect.addItem(wave3, 3);
-    //waveformSelect.addItem(wave4, 4);
-    //waveformSelect.setSelectedItemIndex(0, true);
-    //addAndMakeVisible(waveformSelect);
+    /* Waveform select combo box
+    String wave1 = "sine";
+    String wave2 = "square";
+    String wave3 = "sawtooth";
+    String wave4 = "triangle";
+    waveformSelect.addItem(wave1, 1);
+    waveformSelect.addItem(wave2, 2);
+    waveformSelect.addItem(wave3, 3);
+    waveformSelect.addItem(wave4, 4);
+    waveformSelect.setSelectedItemIndex(0, true);
+    addAndMakeVisible(waveformSelect);
 
-    //sends value of the sliders to the tree state in the processor
-    //oscGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "osc1gain", oscGainSlider);
-    //waveformVal = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "waveform1", waveformSelect);
-
+    sends value of the sliders to the tree state in the processor
+    oscGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "osc1gain", oscGainSlider);
+    waveformVal = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "waveform1", waveformSelect);
+    */
 
 }
 
@@ -97,12 +96,13 @@ Oscillator::~Oscillator()
 
 void Oscillator::paint(Graphics& g)
 {
+    // Create component title
     juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
-
     g.fillAll(Colours::black);
 
     juce::Rectangle <float> area(0, 0, 400, 400);
 
+    // Create component borders
     juce::Rectangle <float> box1area(0, 0, 80, 245);
     juce::Rectangle <float> box2area(90, 0, 80, 245);
     juce::Rectangle <float> box3area(0, 255, 160, 80);
@@ -110,17 +110,13 @@ void Oscillator::paint(Graphics& g)
     g.drawRect(box1area);
     g.drawRect(box2area);
     g.drawRect(box3area);
-
-    //g.setColour(Colours::white);
-    //g.drawText("Osc Gain", area, Justification::bottomLeft);
-
 }
 
 void Oscillator::resized()
 {
     juce::Rectangle<int> area = getLocalBounds();
 
-    //draw sliders by reducing area from rectangle above
+    // Position component variables
     //waveformSelect.setBounds(40, 60, 100, 50);
     osc1WtSlider.setBounds(10, 5, 60, 100);
     osc2WtSlider.setBounds(10, 120, 60, 100);

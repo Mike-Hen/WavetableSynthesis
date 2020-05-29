@@ -15,9 +15,11 @@ class Oscillator : public Component
 public:
     Oscillator(Wsynth_v1AudioProcessor&);
     ~Oscillator();
+
     void paint(Graphics&) override;
     void resized() override;
 
+    // Create components objects
     Slider osc1GainSlider;
     Slider osc2GainSlider;
     Slider osc1WtSlider;
@@ -27,6 +29,5 @@ public:
 
 private:
     Wsynth_v1AudioProcessor& processor;
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Oscillator)
 };

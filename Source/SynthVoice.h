@@ -228,7 +228,7 @@ public:
     {
         dist1OnOff = *onoff;
         dist1InputGainRaw = *inputGain;
-        dist1OutputGainRaw = *inputGain;
+        dist1OutputGainRaw = *outputGain;
         dist1InputGain = Decibels::decibelsToGain(dist1InputGainRaw);
         dist1OutputGain = Decibels::decibelsToGain(dist1OutputGainRaw);
         dist1DryWet = *drywet/100;
@@ -247,21 +247,25 @@ public:
             {
                 outputBuffer.addSample(channel, startSample, (myADSR.getNextSample() * vel * masterGain *
                     (waveTable1[(int)osc1phase] + waveTable2[(int)osc2phase])));
+
+                float input_sample = outputBuffer.getSample(channel, sample);
+                float cur_sample = input_sample;
+                if (input_sample > 1)
+                    cur_sample = 2 / 3;
+                else if (input_sample < -1)
+                    cur_sample = -2 / 3;
+                else
+                    cur_sample = cur_sample - ((cur_sample * cur_sample * cur_sample) / 3);
+                cur_sample = (dist1DryWet * cur_sample) + ((1 - dist1DryWet) * input_sample);
+                outputBuffer.setSample(channel, sample, cur_sample * dist1OutputGain);
             }
             osc1phase = fmod((osc1phase + osc1increment), wtSize);
             osc2phase = fmod((osc2phase + osc2increment), wtSize);
             startSample++;
         }
-        
-        //===== APPLY FILTER =====//
-        for (int sample = 0; sample < numSample; sample++) {
-            outputBuffer.setSample(0, sample, processLoFilt.process(outputBuffer.getSample(0, sample), filt1Cutoff, 0));
-            outputBuffer.setSample(1, sample, processLoFilt.process(outputBuffer.getSample(1, sample), filt1Cutoff, 0));
-            outputBuffer.setSample(0, sample, processHiFilt.process(outputBuffer.getSample(0, sample), filt2Cutoff, 1));
-            outputBuffer.setSample(1, sample, processHiFilt.process(outputBuffer.getSample(1, sample), filt2Cutoff, 1));
-        }
 
         //===== APPLY DISTORTION =====//
+        /*
         for (int sample = 0; sample < numSample; sample++) 
         {
             for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
@@ -276,6 +280,17 @@ public:
                 outputBuffer.setSample(channel, sample, cur_sample * dist1OutputGain);
             }
         } 
+        */
+
+        //===== APPLY FILTER =====//
+        /*
+        for (int sample = 0; sample < numSample; sample++) {
+            outputBuffer.setSample(0, sample, processLoFilt.process(outputBuffer.getSample(0, sample), filt1Cutoff, 0));
+            outputBuffer.setSample(1, sample, processLoFilt.process(outputBuffer.getSample(1, sample), filt1Cutoff, 0));
+            outputBuffer.setSample(0, sample, processHiFilt.process(outputBuffer.getSample(0, sample), filt2Cutoff, 1));
+            outputBuffer.setSample(1, sample, processHiFilt.process(outputBuffer.getSample(1, sample), filt2Cutoff, 1));
+        }
+        */
     }
 
 private:
