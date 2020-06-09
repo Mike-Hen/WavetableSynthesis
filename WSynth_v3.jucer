@@ -25,6 +25,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="JWGUs3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="n8QkPU" name="OscScope.cpp" compile="1" resource="0" file="Source/OscScope.cpp"/>
+    <FILE id="qj5AIr" name="OscScope.h" compile="0" resource="0" file="Source/OscScope.h"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2017 targetFolder="Builds/VisualStudio2017">

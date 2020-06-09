@@ -13,6 +13,7 @@
 #include "Oscillator.h"
 #include "Filter.h"
 #include "Distortion.h"
+#include "OscScope.h"
 
 //==============================================================================
 
@@ -28,6 +29,9 @@ public:
 
 private:
     Wsynth_v1AudioProcessor& processor;
+
+    // Scope
+    OscScope signalScope;
 
     // Master gain
     Slider masterGainSlider;

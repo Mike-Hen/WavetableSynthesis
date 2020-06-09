@@ -105,7 +105,7 @@ void Oscillator::paint(Graphics& g)
     // Create component borders
     juce::Rectangle <float> box1area(0, 0, 80, 245);
     juce::Rectangle <float> box2area(90, 0, 80, 245);
-    juce::Rectangle <float> box3area(0, 255, 160, 80);
+    juce::Rectangle <float> box3area(0, 255, 170, 75);
     g.setColour(Colours::maroon);
     g.drawRect(box1area);
     g.drawRect(box2area);

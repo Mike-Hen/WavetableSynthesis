@@ -23,7 +23,7 @@ public:
 
     void buttonClicked(Button* button) override;
 
-    // Create components objects
+    // Create component objects
     Slider inputGainSlider;
     Slider outputGainSlider;
     Slider dryWetSlider;

@@ -10,7 +10,7 @@
 
 //==============================================================================
 Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p)
+    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p), signalScope(p)
 {
     setSize (1000, 500); // Set synth size
 
@@ -80,6 +80,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     addAndMakeVisible(&filt1);
     addAndMakeVisible(&filt2);
     addAndMakeVisible(&dist1);
+    addAndMakeVisible(&signalScope);
 
     //===== Tracking GUI values =====//
 
@@ -214,6 +215,7 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
     juce::Rectangle <float> area(0, 0, getWidth(), getHeight());
     g.setColour(Colours::darkred);
     g.drawRect(area, 4.0f);
+
 }
 
 void Wsynth_v1AudioProcessorEditor::resized()
@@ -224,7 +226,8 @@ void Wsynth_v1AudioProcessorEditor::resized()
     envGui.setBounds(getWidth() - 160, 320, 150, 150);
     filt1.setBounds(440, 10, 80, 200);
     filt2.setBounds(530, 10, 250, 200);
-    dist1.setBounds(190, 10, 240, 170);
+    dist1.setBounds(190, 10, 240, 200);
+    signalScope.setBounds(190, 140, 500, 200);
 
     // Position ADSR preset buttons
     presetADSR1.setBounds(250, 370, 80, 70);

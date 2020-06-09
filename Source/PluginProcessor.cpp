@@ -56,6 +56,10 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
 
     mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
+
+    historyLength = 1000;
+    for (int i = 0; i < historyLength; i++)
+        history.add(0);
 }
 
 Wsynth_v1AudioProcessor::~Wsynth_v1AudioProcessor()
@@ -204,6 +208,18 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
     
     buffer.clear();
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    for (int i = 0; i < buffer.getNumSamples(); i++)
+    {
+        if (i % 5 == 0)
+        {
+            float sample = buffer.getSample(0, i) / 2 + buffer.getSample(1, i) / 2;
+            history.add(sample);
+
+            if (history.size() > historyLength)
+                history.remove(0);
+        }
+    }
 }
 
 //==============================================================================

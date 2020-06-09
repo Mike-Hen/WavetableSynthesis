@@ -172,32 +172,29 @@ public:
 
     void getOsc1(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
-        osc1GainRaw = *gain;
-        osc1Gain = Decibels::decibelsToGain(osc1GainRaw);
-        osc1WtVal = *wtVal;
-        osc1Pitch = *oscpitch;
+        osc1Gain = Decibels::decibelsToGain(gain->load());
+        osc1WtVal.store(*wtVal);
+        osc1Pitch.store(*oscpitch);
     }
     
     void getOsc2(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
-        osc2GainRaw = *gain;
-        osc2Gain = Decibels::decibelsToGain(osc2GainRaw);
-        osc2WtVal = *wtVal;
-        osc2Pitch = *oscpitch;
+        osc2Gain = Decibels::decibelsToGain(gain->load());
+        osc2WtVal.store(*wtVal);
+        osc2Pitch.store(*oscpitch);
     }
 
     void getMasterGain(std::atomic<float>* lastGain)
     {
-        masterGainRaw = *lastGain;
-        masterGain = Decibels::decibelsToGain(masterGainRaw);
+        masterGain = Decibels::decibelsToGain(lastGain->load());
     }
 
     void getEnvelopeParams(std::atomic<float>* attack, std::atomic<float>* decay, std::atomic<float>* sustain, std::atomic<float>* release)
     {
-        adsrParams.attack = *attack;
-        adsrParams.decay = *decay;
-        adsrParams.sustain = *sustain;
-        adsrParams.release = *release;
+        adsrParams.attack = attack->load();
+        adsrParams.decay = decay->load();
+        adsrParams.sustain = sustain->load();
+        adsrParams.release = release->load();
     }
 
     void setADSRSampleRate(double sampleRate)
@@ -214,24 +211,29 @@ public:
     {
         //filt1OnOff = *onoff;
         //filt1Filt = *filt ;
-        filt1Cutoff = *cutoff;
+        filt1Cutoff.store(*cutoff);
     }
 
         void getFilt2(/*float* onoff, float* filt,*/ std::atomic<float>* cutoff)
     {
         //filt1OnOff = *onoff;
         //filt1Filt = *filt ;
-        filt2Cutoff = *cutoff;
+        filt2Cutoff.store(*cutoff);
     }
 
     void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet)
     {
-        dist1OnOff = *onoff;
-        dist1InputGainRaw = *inputGain;
-        dist1OutputGainRaw = *outputGain;
-        dist1InputGain = Decibels::decibelsToGain(dist1InputGainRaw);
-        dist1OutputGain = Decibels::decibelsToGain(dist1OutputGainRaw);
-        dist1DryWet = *drywet/100;
+        dist1OnOff.store(*onoff);
+        dist1InputGain.store(Decibels::decibelsToGain(inputGain->load()));
+        dist1OutputGain.store(Decibels::decibelsToGain(outputGain->load()));
+        dist1DryWet.store(*drywet/100);
+    }
+
+    float applyDist1(float inputSample)
+    {
+        dist1CurSample = tanh(inputSample * dist1InputGain.load());
+        dist1CurSample = (dist1DryWet.load() * dist1CurSample * dist1OutputGain.load()) + ((1 - dist1DryWet.load()) * inputSample);
+        return dist1CurSample;
     }
 
     //===== RENDER OUTPUT =====//
@@ -245,57 +247,21 @@ public:
         {
             for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
             {
-                outputBuffer.addSample(channel, startSample, (myADSR.getNextSample() * vel * masterGain *
-                    (waveTable1[(int)osc1phase] + waveTable2[(int)osc2phase])));
-
-                float input_sample = outputBuffer.getSample(channel, sample);
-                float cur_sample = input_sample;
-                if (input_sample > 1)
-                    cur_sample = 2 / 3;
-                else if (input_sample < -1)
-                    cur_sample = -2 / 3;
-                else
-                    cur_sample = cur_sample - ((cur_sample * cur_sample * cur_sample) / 3);
-                cur_sample = (dist1DryWet * cur_sample) + ((1 - dist1DryWet) * input_sample);
-                outputBuffer.setSample(channel, sample, cur_sample * dist1OutputGain);
+                //===== APPLY ADSR, VEL, Gain, Wavetable =====//
+                float nextSample = myADSR.getNextSample() * vel * masterGain * (waveTable1[(int)osc1phase] + waveTable2[(int)osc2phase]);
+                nextSample = applyDist1(nextSample);
+                nextSample = processLoFilt.process(nextSample, filt1Cutoff.load(), 0);
+                nextSample = processHiFilt.process(nextSample, filt2Cutoff.load(), 1);
+                outputBuffer.addSample(channel, startSample, nextSample);
             }
             osc1phase = fmod((osc1phase + osc1increment), wtSize);
             osc2phase = fmod((osc2phase + osc2increment), wtSize);
             startSample++;
         }
-
-        //===== APPLY DISTORTION =====//
-        /*
-        for (int sample = 0; sample < numSample; sample++) 
-        {
-            for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
-            {
-                float input_sample = outputBuffer.getSample(channel, sample);
-                float cur_sample = input_sample;
-                if (input_sample > 0)
-                    cur_sample = 1 - exp(-(cur_sample * dist1InputGain));
-                else
-                    cur_sample = -1 + exp(cur_sample * dist1InputGain);
-                cur_sample = (dist1DryWet * cur_sample) + ((1 - dist1DryWet) * input_sample);
-                outputBuffer.setSample(channel, sample, cur_sample * dist1OutputGain);
-            }
-        } 
-        */
-
-        //===== APPLY FILTER =====//
-        /*
-        for (int sample = 0; sample < numSample; sample++) {
-            outputBuffer.setSample(0, sample, processLoFilt.process(outputBuffer.getSample(0, sample), filt1Cutoff, 0));
-            outputBuffer.setSample(1, sample, processLoFilt.process(outputBuffer.getSample(1, sample), filt1Cutoff, 0));
-            outputBuffer.setSample(0, sample, processHiFilt.process(outputBuffer.getSample(0, sample), filt2Cutoff, 1));
-            outputBuffer.setSample(1, sample, processHiFilt.process(outputBuffer.getSample(1, sample), filt2Cutoff, 1));
-        }
-        */
     }
 
 private:
     // Master
-    float masterGainRaw;
     float masterGain;
     double wtSize = 2048 * 8;
 
@@ -320,26 +286,23 @@ private:
     Array<float> square2saw;
 
     // Osc
-    float osc1WtVal;
-    float osc2WtVal;
-    float osc1GainRaw;
-    float osc2GainRaw;
-    float osc1Gain;
-    float osc2Gain;
-    float osc1Pitch;
-    float osc2Pitch;
+    std::atomic<float> osc1WtVal;
+    std::atomic<float> osc2WtVal;
+    std::atomic<float> osc1Gain;
+    std::atomic<float> osc2Gain;
+    std::atomic<float> osc1Pitch;
+    std::atomic<float> osc2Pitch;
 
     // Filt
-    float filt1Cutoff;
-    float filt2Cutoff;
+    std::atomic<float> filt1Cutoff;
+    std::atomic<float> filt2Cutoff;
 
     // Dist
-    bool dist1OnOff;
-    float dist1InputGainRaw;
-    float dist1OutputGainRaw;
-    float dist1InputGain;
-    float dist1OutputGain;
-    float dist1DryWet;
+    std::atomic<bool> dist1OnOff;
+    std::atomic<float> dist1InputGain;
+    std::atomic<float> dist1OutputGain;
+    std::atomic<float> dist1DryWet;
+    std::atomic<float> dist1CurSample;
 
     // ADSR
     ADSR myADSR;
