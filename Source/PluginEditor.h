@@ -49,6 +49,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> dist1InputGainVal;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> dist1OutputGainVal;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> dist1DryWetVal;
+    ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> dist1MethodVal;
 
     // Oscillator values
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> osc1WtVal;

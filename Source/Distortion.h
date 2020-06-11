@@ -12,7 +12,7 @@
 //==============================================================================
 
 class Distortion : public Component,
-    public Button::Listener
+    public Button::Listener, public Timer
 {
 public:
     Distortion(Wsynth_v1AudioProcessor&);
@@ -21,13 +21,19 @@ public:
     void paint(Graphics&) override;
     void resized() override;
 
+    void timerCallback() override;
     void buttonClicked(Button* button) override;
+    Array<float> getDistortionCurve(int distLength);
 
     // Create component objects
     Slider inputGainSlider;
     Slider outputGainSlider;
     Slider dryWetSlider;
+    ComboBox methodSelect;
     TextButton distOnOff;
+
+    Image distortionImage;
+    ScopedPointer<Graphics> distortionGraphic;
 
 private:
     Wsynth_v1AudioProcessor& processor;

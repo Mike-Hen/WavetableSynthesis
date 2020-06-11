@@ -9,6 +9,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SynthSound.h"
 #include "Filtered.h"
+#define _USE_MATH_DEFINES
+#include "math.h"
 
 //==============================================================================
 
@@ -221,9 +223,10 @@ public:
         filt2Cutoff.store(*cutoff);
     }
 
-    void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet)
+    void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet, std::atomic<float>* distMethod)
     {
         dist1OnOff.store(*onoff);
+        dist1Method.store(*distMethod);
         dist1InputGain.store(Decibels::decibelsToGain(inputGain->load()));
         dist1OutputGain.store(Decibels::decibelsToGain(outputGain->load()));
         dist1DryWet.store(*drywet/100);
@@ -231,7 +234,19 @@ public:
 
     float applyDist1(float inputSample)
     {
-        dist1CurSample = tanh(inputSample * dist1InputGain.load());
+        if (dist1Method == 1)
+        {
+            dist1CurSample = tanh(inputSample);
+        }
+        else if (dist1Method == 2)
+        {
+            dist1CurSample = erf((sqrt(M_PI) / 1) * dist1CurSample);
+        }
+        else if (dist1Method == 3)
+        {
+            dist1CurSample = erf((sqrt(M_PI) / 0.5) * dist1CurSample);
+        }
+        dist1CurSample = jlimit<float>(-dist1InputGain.load(), dist1InputGain.load(), dist1CurSample);
         dist1CurSample = (dist1DryWet.load() * dist1CurSample * dist1OutputGain.load()) + ((1 - dist1DryWet.load()) * inputSample);
         return dist1CurSample;
     }
@@ -299,6 +314,7 @@ private:
 
     // Dist
     std::atomic<bool> dist1OnOff;
+    std::atomic<float> dist1Method;
     std::atomic<float> dist1InputGain;
     std::atomic<float> dist1OutputGain;
     std::atomic<float> dist1DryWet;

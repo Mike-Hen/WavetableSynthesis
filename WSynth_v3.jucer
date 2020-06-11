@@ -5,6 +5,8 @@
               companyName="MikeHen" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="YO3mZ4" name="WSynth_v3">
     <GROUP id="{8C2552DA-DEF7-92D4-2D49-811752AF82F7}" name="Source">
+      <FILE id="qj5AIr" name="OscScope.h" compile="0" resource="0" file="Source/OscScope.h"/>
+      <FILE id="n8QkPU" name="OscScope.cpp" compile="1" resource="0" file="Source/OscScope.cpp"/>
       <FILE id="m6T2F6" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
       <FILE id="dgIWY3" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
       <FILE id="Rr62pe" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>
@@ -25,8 +27,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="JWGUs3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="n8QkPU" name="OscScope.cpp" compile="1" resource="0" file="Source/OscScope.cpp"/>
-    <FILE id="qj5AIr" name="OscScope.h" compile="0" resource="0" file="Source/OscScope.h"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2017 targetFolder="Builds/VisualStudio2017">

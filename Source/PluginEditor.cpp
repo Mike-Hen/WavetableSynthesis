@@ -25,6 +25,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     addAndMakeVisible(masterGainSlider);
 
     //===== Setup ADSR presets =====//
+    /*
     presetADSR1.setSize(80, 70);
     presetADSR1.setClickingTogglesState(false);
     presetADSR1.setButtonText("presetADSR1");
@@ -73,6 +74,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::black);
     presetADSR7.addListener(this);
     addAndMakeVisible(presetADSR7);
+    */
 
     //====== Add components to GUI =====//
     addAndMakeVisible(&envGui);
@@ -112,6 +114,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     dist1InputGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1inputgain", dist1.inputGainSlider);
     dist1OutputGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1outputgain", dist1.outputGainSlider);
     dist1DryWetVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1drywet", dist1.dryWetSlider);
+    dist1MethodVal = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "dist1method", dist1.methodSelect);
 }
 
 Wsynth_v1AudioProcessorEditor::~Wsynth_v1AudioProcessorEditor()
@@ -121,6 +124,7 @@ Wsynth_v1AudioProcessorEditor::~Wsynth_v1AudioProcessorEditor()
 //==== Tracking ADSR preset buttons ====//
 void Wsynth_v1AudioProcessorEditor::buttonClicked(Button* button)
 {
+    /*
     if (presetADSR1.isMouseOver() == true)
     {
         presetADSR1.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
@@ -198,6 +202,7 @@ void Wsynth_v1AudioProcessorEditor::buttonClicked(Button* button)
         presetADSR7.setColour(TextButton::ColourIds::buttonColourId, Colours::grey);
         envGui.setADSRValues(5.0f, 2.0f, 1.0f, 5.0f);
     }
+    */
 }
 
 void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
@@ -224,12 +229,13 @@ void Wsynth_v1AudioProcessorEditor::resized()
     masterGainSlider.setBounds(getWidth() - 100, 25, 75, 100);
     oscGui.setBounds(10,10, 170, 340);
     envGui.setBounds(getWidth() - 160, 320, 150, 150);
-    filt1.setBounds(440, 10, 80, 200);
-    filt2.setBounds(530, 10, 250, 200);
-    dist1.setBounds(190, 10, 240, 200);
-    signalScope.setBounds(190, 140, 500, 200);
+    filt1.setBounds(520, 10, 80, 200);
+    filt2.setBounds(610, 10, 250, 200);
+    dist1.setBounds(190, 10, 320, 220);
+    signalScope.setBounds(190, 240, 500, 200);
 
     // Position ADSR preset buttons
+    /*
     presetADSR1.setBounds(250, 370, 80, 70);
     presetADSR2.setBounds(330, 370, 80, 70);
     presetADSR3.setBounds(410, 370, 80, 70);
@@ -237,4 +243,5 @@ void Wsynth_v1AudioProcessorEditor::resized()
     presetADSR5.setBounds(570, 370, 80, 70);
     presetADSR6.setBounds(650, 370, 80, 70);
     presetADSR7.setBounds(730, 370, 80, 70);
+    */
 }

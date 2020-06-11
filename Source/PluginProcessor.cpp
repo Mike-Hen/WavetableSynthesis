@@ -41,9 +41,10 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
             std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
             // Distortion
             std::make_unique<AudioParameterBool>("dist1onoff", "Dist1OnOff", false),
-            std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -20.0f, 20.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -60.0f, 0.0f, 0.0f),
             std::make_unique<AudioParameterFloat>("dist1outputgain", "Dist1OutputGain",  -20.0f, 20.0f, 0.0f),
             std::make_unique<AudioParameterFloat>("dist1drywet", "Dist1DryWet",  0.0f, 100.0f, 0.0f),
+            std::make_unique<AudioParameterFloat>("dist1method", "Dist1Method",  1.0f, 3.0f, 1.0f)
         })
 #endif
 {
@@ -202,7 +203,8 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
             myVoice->getDist1(          tree.getRawParameterValue("dist1onoff"), 
                                         tree.getRawParameterValue("dist1inputgain"),
                                         tree.getRawParameterValue("dist1outputgain"), 
-                                        tree.getRawParameterValue("dist1drywet"));
+                                        tree.getRawParameterValue("dist1drywet"),
+                                        tree.getRawParameterValue("dist1method"));
         }
     }
     
