@@ -14,7 +14,7 @@
 OscScope::OscScope(Wsynth_v1AudioProcessor& p) :
     processor(p)
 {
-    startTimer(1000 / 20);
+    startTimer(1000 / 100);
 
     historyImage = Image(juce::Image::ARGB, 500, 200, true);
     historyGraphic = new Graphics(historyImage);

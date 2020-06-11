@@ -10,19 +10,9 @@
 
 //==============================================================================
 Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p), signalScope(p)
+    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p), signalScope(p), master (p)
 {
     setSize (1000, 500); // Set synth size
-
-    //===== Master gain =====//
-    masterGainSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
-    masterGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 100, 25);
-    masterGainSlider.setTextBoxIsEditable(true);
-    masterGainSlider.setNumDecimalPlacesToDisplay(1);
-    masterGainSlider.setRange(-60.0, 0.0);
-    masterGainSlider.setValue(-12.0);
-    masterGainSlider.setTextValueSuffix(" dB");
-    addAndMakeVisible(masterGainSlider);
 
     //===== Setup ADSR presets =====//
     /*
@@ -77,6 +67,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     */
 
     //====== Add components to GUI =====//
+    addAndMakeVisible(&master);
     addAndMakeVisible(&envGui);
     addAndMakeVisible(&oscGui);
     addAndMakeVisible(&filt1);
@@ -87,7 +78,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     //===== Tracking GUI values =====//
 
     // Master
-    masterGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "mastergain", masterGainSlider);
+    masterGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "mastergain", master.gainSlider);
     
     // Oscillators
     osc1WtVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "osc1wt", oscGui.osc1WtSlider);
@@ -212,25 +203,20 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
     g.fillAll(Colours::black);
     g.setColour(Colours::white);
 
-    // Create gain descriptor
-    juce::Rectangle<int> nameArea(getWidth() - 100, 15, 75, 100);
-    g.drawText("Master Gain", nameArea, Justification::centredTop);
-
     // Create synth border
     juce::Rectangle <float> area(0, 0, getWidth(), getHeight());
     g.setColour(Colours::darkred);
     g.drawRect(area, 4.0f);
-
 }
 
 void Wsynth_v1AudioProcessorEditor::resized()
 {
     // Position components
-    masterGainSlider.setBounds(getWidth() - 100, 25, 75, 100);
+    master.setBounds(getWidth() - 160, 10, 150, 140);
     oscGui.setBounds(10,10, 170, 340);
     envGui.setBounds(getWidth() - 160, 320, 150, 150);
     filt1.setBounds(520, 10, 80, 200);
-    filt2.setBounds(610, 10, 250, 200);
+    filt2.setBounds(610, 10, 80, 200);
     dist1.setBounds(190, 10, 320, 220);
     signalScope.setBounds(190, 240, 500, 200);
 

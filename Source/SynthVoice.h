@@ -240,11 +240,11 @@ public:
         }
         else if (dist1Method == 2)
         {
-            dist1CurSample = erf((sqrt(M_PI) / 1) * dist1CurSample);
+            dist1CurSample = erf((sqrt(M_PI) / 1) * inputSample);
         }
         else if (dist1Method == 3)
         {
-            dist1CurSample = erf((sqrt(M_PI) / 0.5) * dist1CurSample);
+            dist1CurSample = erf((sqrt(M_PI) / 0.5) * inputSample);
         }
         dist1CurSample = jlimit<float>(-dist1InputGain.load(), dist1InputGain.load(), dist1CurSample);
         dist1CurSample = (dist1DryWet.load() * dist1CurSample * dist1OutputGain.load()) + ((1 - dist1DryWet.load()) * inputSample);

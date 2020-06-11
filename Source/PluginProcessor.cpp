@@ -61,6 +61,11 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
     historyLength = 1000;
     for (int i = 0; i < historyLength; i++)
         history.add(0);
+    masterLevelLength = 1000;
+    for (int i = 0; i < masterLevelLength; i++)
+        masterLevelLeft.add(0);
+        masterLevelRight.add(0);
+
 }
 
 Wsynth_v1AudioProcessor::~Wsynth_v1AudioProcessor()
@@ -220,6 +225,15 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
 
             if (history.size() > historyLength)
                 history.remove(0);
+
+            masterLevelLeft.add(buffer.getSample(0, i));
+            masterLevelRight.add(buffer.getSample(1, i));
+
+            if (masterLevelLeft.size() > masterLevelLength)
+                masterLevelLeft.remove(0);
+
+            if (masterLevelRight.size() > masterLevelLength)
+                masterLevelRight.remove(0);
         }
     }
 }

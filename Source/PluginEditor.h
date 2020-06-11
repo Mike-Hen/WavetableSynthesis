@@ -14,6 +14,7 @@
 #include "Filter.h"
 #include "Distortion.h"
 #include "OscScope.h"
+#include "Master.h"
 
 //==============================================================================
 
@@ -33,10 +34,8 @@ private:
     // Scope
     OscScope signalScope;
 
-    // Master gain
-    Slider masterGainSlider;
+    // Master
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> masterGainVal;
-    Label volumeLabel;
 
     // Filter values
     ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> filt1OnOffVal;
@@ -66,6 +65,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> releaseVal;
 
     // Create synth components
+    Master master;
     Filter filt1;
     Filter filt2;
     Distortion dist1;

@@ -25,6 +25,7 @@ Distortion::Distortion(Wsynth_v1AudioProcessor& p) : processor(p)
     inputGainSlider.setRange(-60.0, 0);
     inputGainSlider.setValue(0.0);
     inputGainSlider.setTextValueSuffix(" dB");
+    inputGainSlider.addListener(this);
     addAndMakeVisible(&inputGainSlider);
 
     // Design output gain slider
@@ -57,6 +58,7 @@ Distortion::Distortion(Wsynth_v1AudioProcessor& p) : processor(p)
     methodSelect.addItem(method2, 2);
     methodSelect.addItem(method3, 3);
     methodSelect.setSelectedItemIndex(0, true);
+    methodSelect.addListener(this);
     addAndMakeVisible(methodSelect);
 
     // Design distortion on/off button
@@ -67,8 +69,6 @@ Distortion::Distortion(Wsynth_v1AudioProcessor& p) : processor(p)
     //distOnOff.addListener(this);
     //addAndMakeVisible(distOnOff);
 
-    startTimer(1000/20);
-
     distortionImage = Image(juce::Image::ARGB, 220, 100, true);
     distortionGraphic = new Graphics(distortionImage);
 }
@@ -77,21 +77,12 @@ Distortion::~Distortion()
 {
 }
 
-void Distortion::buttonClicked(Button* button)
+void Distortion::comboBoxChanged(ComboBox* combobox)
 {
-    if (distOnOff.getToggleState() == true)
-    {
-        distOnOff.setButtonText("On");
-        distOnOff.setColour(TextButton::ColourIds::buttonColourId, Colours::limegreen);
-    }
-    else if (distOnOff.getToggleState() == false)
-    {
-        distOnOff.setButtonText("Off");
-        distOnOff.setColour(TextButton::ColourIds::buttonColourId, Colours::red);
-    }
+    repaint();
 }
 
-void Distortion::timerCallback()
+void Distortion::sliderValueChanged(Slider* slider)
 {
     repaint();
 }
@@ -127,6 +118,9 @@ Array<float> Distortion::getDistortionCurve(int distLength)
 
 void Distortion::paint(Graphics& g)
 {
+    // Text Font
+    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+
     // Create Background
     juce::Rectangle <float> background(0, 0, 320, 220);
     g.setColour(Colours::darkgrey);
@@ -140,7 +134,7 @@ void Distortion::paint(Graphics& g)
     // Create component title
     juce::Rectangle<int> titleArea(0, 5, getWidth(), 40);
     g.setColour(Colours::black);
-    g.drawText("Distortion", titleArea, Justification::centredTop);
+    g.drawText("DISTORTION", titleArea, Justification::centredTop);
 
     // Create component border
     juce::Rectangle <float> border(0, 0, 320, 220);

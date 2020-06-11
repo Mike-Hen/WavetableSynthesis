@@ -66,6 +66,20 @@ public:
     {
         return history;
     }
+    Array<float> masterLevelLeft;
+    Array<float> masterLevelRight;
+    int masterLevelLength;
+    Array<float> getMasterLevel(int channel)
+    {
+        if (channel == 0)
+        {
+            return masterLevelLeft;
+        }
+        else if (channel == 1)
+        {
+            return masterLevelRight;
+        }
+    }
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Wsynth_v1AudioProcessor)

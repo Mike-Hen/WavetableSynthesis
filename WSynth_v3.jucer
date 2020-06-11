@@ -5,6 +5,8 @@
               companyName="MikeHen" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="YO3mZ4" name="WSynth_v3">
     <GROUP id="{8C2552DA-DEF7-92D4-2D49-811752AF82F7}" name="Source">
+      <FILE id="YDy6zW" name="Master.h" compile="0" resource="0" file="Source/Master.h"/>
+      <FILE id="ncYzjQ" name="Master.cpp" compile="1" resource="0" file="Source/Master.cpp"/>
       <FILE id="qj5AIr" name="OscScope.h" compile="0" resource="0" file="Source/OscScope.h"/>
       <FILE id="n8QkPU" name="OscScope.cpp" compile="1" resource="0" file="Source/OscScope.cpp"/>
       <FILE id="m6T2F6" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
