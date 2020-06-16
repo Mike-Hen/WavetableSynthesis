@@ -29,7 +29,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     osc2WtSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2WtSlider.setTextBoxIsEditable(true);
-    osc1WtSlider.addListener(this);
+    osc2WtSlider.addListener(this);
     osc2WtSlider.setColour(osc2WtSlider.textBoxOutlineColourId, Colours::darkgrey);
     osc2WtSlider.setNumDecimalPlacesToDisplay(1);
     osc2WtSlider.setRange(0.0, 300.0);
@@ -79,6 +79,50 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2PitchSlider.setValue(1.0);
     addAndMakeVisible(&osc2PitchSlider);
 
+    // Design Osc 1 Pitch Cent Up Button
+    osc1CentUp.setSize(15, 15);
+    osc1CentUp.addListener(this);
+    addAndMakeVisible(&osc1CentUp);
+    osc1CentDown.setSize(15, 15);
+    osc1CentDown.addListener(this);
+    addAndMakeVisible(&osc1CentDown);
+
+    osc1FineUp.setSize(15, 15);
+    osc1FineUp.addListener(this);
+    addAndMakeVisible(&osc1FineUp);
+    osc1FineDown.setSize(15, 15);
+    osc1FineDown.addListener(this);
+    addAndMakeVisible(&osc1FineDown);
+
+    osc2CentUp.setSize(15, 15);
+    osc2CentUp.addListener(this);
+    addAndMakeVisible(&osc2CentUp);
+    osc2CentDown.setSize(15, 15);
+    osc2CentDown.addListener(this);
+    addAndMakeVisible(&osc2CentDown);
+
+    osc2FineUp.setSize(15, 15);
+    osc2FineUp.addListener(this);
+    addAndMakeVisible(&osc2FineUp);
+    osc2FineDown.setSize(15, 15);
+    osc2FineDown.addListener(this);
+    addAndMakeVisible(&osc2FineDown);
+
+    osc1Cent.setButtonText(String(osc1CentValue));
+    osc1Cent.setSize(30, 30);
+    addAndMakeVisible(&osc1Cent);
+    osc1Fine.setButtonText(String(osc1FineValue));
+    osc1Fine.setSize(30, 30);
+    addAndMakeVisible(&osc1Fine);
+
+    osc2Cent.setButtonText(String(osc1CentValue));
+    osc2Cent.setSize(30, 30);
+    addAndMakeVisible(&osc2Cent);
+    osc2Fine.setButtonText(String(osc2FineValue));
+    osc2Fine.setSize(30, 30);
+    addAndMakeVisible(&osc2Fine);
+
+    
     osc1Image = Image(juce::Image::ARGB, getWidth() / 2 - 25, 230, true);
     osc1Graphic = new Graphics(osc1Image);
 
@@ -106,6 +150,104 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
 
 Oscillator::~Oscillator()
 {
+}
+
+void Oscillator::buttonClicked(Button* button)
+{
+    if (button == &osc1CentUp)
+    {
+        osc1CentValue = oscCentValueChange("up", osc1CentValue);
+        osc1Cent.setButtonText(String(osc1CentValue));
+    }
+    else if (button == &osc1CentDown)
+    {
+        osc1CentValue = oscCentValueChange("down", osc1CentValue);
+        osc1Cent.setButtonText(String(osc1CentValue));
+    }
+    else if (button == &osc1FineUp)
+    {
+        osc1FineValue = oscFineValueChange("up", &osc1Fine, &osc1CentValue, osc1FineValue);
+        osc1Fine.setButtonText(String(osc1FineValue));
+    }
+    else if (button == &osc1FineDown)
+    {
+        osc1FineValue = oscFineValueChange("down", &osc1Fine, &osc1CentValue, osc1FineValue);
+        osc1Fine.setButtonText(String(osc1FineValue));
+    }
+    else if (button == &osc2CentUp)
+    {
+        osc2CentValue = oscCentValueChange("up", osc2CentValue);
+        osc2Cent.setButtonText(String(osc2CentValue));
+    }
+    else if (button == &osc2CentDown)
+    {
+        osc2CentValue = oscCentValueChange("down", osc2CentValue);
+        osc2Cent.setButtonText(String(osc2CentValue));
+    }
+    else if (button == &osc2FineDown)
+    {
+        osc2FineValue = oscFineValueChange("up", &osc2Fine, &osc2CentValue, osc2FineValue);
+        osc2Fine.setButtonText(String(osc2FineValue));
+    }
+    else if (button == &osc2FineDown)
+    {
+        osc2FineValue = oscFineValueChange("down", &osc2Fine, &osc2CentValue, osc2FineValue);
+        osc2Fine.setButtonText(String(osc2FineValue));
+    }
+}
+
+int Oscillator::oscCentValueChange(String command, int centVal)
+{   
+    if (command == "up")
+    {
+        if (centVal < 99)
+        {
+            centVal++;
+        }
+    }
+    if (command == "down")
+    {
+        if (centVal > -99)
+        {
+            centVal--;
+        }
+    }
+    return centVal;
+}
+
+int Oscillator::oscFineValueChange(String command, TextButton* cent, int* centVal, int fineVal)
+{
+    if (command == "up")
+    {
+        if (fineVal < 99)
+        {
+            fineVal++;
+        }
+        else
+        {
+            fineVal = 0;
+            int currentCentVal = *centVal;
+            int newCentVal = oscCentValueChange("up", currentCentVal);
+            *centVal = newCentVal;
+            cent->setButtonText(String(newCentVal));
+        }
+    }
+    if (command == "down")
+    {
+        if (fineVal > -99)
+        {
+            fineVal--;
+        }
+        else
+        {
+            fineVal = 0;
+            int currentCentVal = *centVal;
+            int newCentVal = oscCentValueChange("down", currentCentVal);
+            *centVal = newCentVal;
+            cent->setButtonText(String(newCentVal));
+        }
+    }
+    return fineVal;
 }
 
 void Oscillator::sliderValueChanged(Slider* slider)
@@ -191,12 +333,12 @@ void Oscillator::paint(Graphics& g)
     if (p1.getBounds().getWidth() < 0.01) return;
     if (p1.getBounds().getWidth() != p1.getBounds().getWidth()) return;
 
-    p1.scaleToFit(0, 0, osc1Image.getWidth(), osc1Image.getHeight(), false);
+    p1.scaleToFit(.005*osc1Image.getWidth(), .025*osc1Image.getHeight(), .99*osc1Image.getWidth(), .95*osc1Image.getHeight(), false);
 
     osc1Image.multiplyAllAlphas(0);
 
     osc1Graphic->setColour(Colours::white);
-    osc1Graphic->strokePath(p1, PathStrokeType(0.5f + max / 2));
+    osc1Graphic->strokePath(p1, PathStrokeType(1.0f + max / 2));
 
     Path p2;
     Array<float> osc2WaveShape = processor.returnOsc2WaveShape();
@@ -220,12 +362,12 @@ void Oscillator::paint(Graphics& g)
     if (p2.getBounds().getWidth() < 0.01) return;
     if (p2.getBounds().getWidth() != p2.getBounds().getWidth()) return;
 
-    p2.scaleToFit(0, 0, osc2Image.getWidth(), osc2Image.getHeight(), false);
+    p2.scaleToFit(.005*osc2Image.getWidth(), .025*osc2Image.getHeight(), .99*osc2Image.getWidth(), .95*osc2Image.getHeight(), false);
 
     osc2Image.multiplyAllAlphas(0);
 
     osc2Graphic->setColour(Colours::white);
-    osc2Graphic->strokePath(p2, PathStrokeType(0.5f + max / 2));
+    osc2Graphic->strokePath(p2, PathStrokeType(1.0f + max / 2));
     
     g.drawImageAt(osc1Image, 10, 35);
     g.drawImageAt(osc2Image, getWidth() / 2 + 15, 35);
@@ -241,6 +383,19 @@ void Oscillator::resized()
     osc2WtSlider.setBounds(getWidth() - 30 - 60, 255, 60, 100);
     osc1GainSlider.setBounds(120, 255, 60, 100);
     osc2GainSlider.setBounds(getWidth() - 120 - 60, 255, 60, 100);
-    osc1PitchSlider.setBounds(210, 285, 70, 40);
-    osc2PitchSlider.setBounds(getWidth() - 210 - 70, 285, 70, 40);
+    //osc1PitchSlider.setBounds(210, 285, 70, 40);
+    osc1CentUp.setBounds(250, 265, 70, 40);
+    osc1Cent.setBounds(240, 280, 70, 40);
+    osc1CentDown.setBounds(250, 313, 70, 40);
+    osc1FineUp.setBounds(285, 265, 70, 40);
+    osc1Fine.setBounds(275, 280, 70, 40);
+    osc1FineDown.setBounds(285, 313, 70, 40);
+    //osc2PitchSlider.setBounds(getWidth() - 210 - 70, 285, 70, 40);
+    osc2CentUp.setBounds(getWidth() - 200 - 70, 265, 70, 40);
+    osc2Cent.setBounds(getWidth() - 210 - 70, 280, 70, 40);
+    osc2CentDown.setBounds(getWidth() - 200 - 70, 313, 70, 40);
+    osc2FineUp.setBounds(getWidth() - 165 - 70, 265, 70, 40);
+    osc2Fine.setBounds(getWidth() - 175 - 70, 280, 70, 40);
+    osc2FineDown.setBounds(getWidth() - 165 - 70, 313, 70, 40);
+    
 }
