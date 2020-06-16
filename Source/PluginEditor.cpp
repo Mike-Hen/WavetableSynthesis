@@ -10,9 +10,9 @@
 
 //==============================================================================
 Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), filt2(p), dist1(p), envGui(p), signalScope(p), master (p)
+    : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), /*filt2(p),*/ dist1(p), envGui(p), signalScope(p), master (p)
 {
-    setSize (1000, 500); // Set synth size
+    setSize (1000, 510); // Set synth size
 
     //===== Setup ADSR presets =====//
     /*
@@ -71,7 +71,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     addAndMakeVisible(&envGui);
     addAndMakeVisible(&oscGui);
     addAndMakeVisible(&filt1);
-    addAndMakeVisible(&filt2);
+    //addAndMakeVisible(&filt2);
     addAndMakeVisible(&dist1);
     addAndMakeVisible(&signalScope);
 
@@ -98,7 +98,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     filt1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "filt1onoff", filt1.filtOnOff);
     filt1Val = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "filt1", filt1.filterSelect);
     filt1CutoffVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "filt1cutoff", filt1.cutoffSlider);
-    filt2CutoffVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "filt2cutoff", filt2.cutoffSlider);
+    //filt2CutoffVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "filt2cutoff", filt2.cutoffSlider);
     
     // Distortion
     dist1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "dist1onoff", dist1.distOnOff);
@@ -212,13 +212,13 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
 void Wsynth_v1AudioProcessorEditor::resized()
 {
     // Position components
-    master.setBounds(getWidth() - 160, 10, 150, 140);
-    oscGui.setBounds(10,10, 170, 340);
-    envGui.setBounds(getWidth() - 160, 320, 150, 150);
-    filt1.setBounds(520, 10, 80, 200);
-    filt2.setBounds(610, 10, 80, 200);
-    dist1.setBounds(190, 10, 320, 220);
-    signalScope.setBounds(190, 240, 500, 200);
+    master.setBounds(getWidth() - 320 - 10, 10, 320, 140);
+    oscGui.setBounds(10, 10, 650, 330);
+    envGui.setBounds(10, 350, 170, 150);
+    filt1.setBounds(getWidth() - 320 - 10, 160, 320, 120);
+    //filt2.setBounds(500, 10, 80, 120);
+    dist1.setBounds(getWidth() - 320 - 10, getHeight() - 210 - 10, 320, 210);
+    signalScope.setBounds(190, getHeight() - 150 - 10, 470, 150);
 
     // Position ADSR preset buttons
     /*

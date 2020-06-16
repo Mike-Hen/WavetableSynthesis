@@ -28,7 +28,7 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
             std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.1f, 1.0f), 0.8f),
             std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
             // Gain
-            std::make_unique<AudioParameterFloat>("mastergain", "MasterGain", -60.0f, 0.0f, -12.0f),
+            std::make_unique<AudioParameterFloat>("mastergain", "MasterGain", -60.0f, 6.0f, -12.0f),
             // Oscillators
             std::make_unique<AudioParameterFloat>("osc1wt", "Osc1Wt", 0.0f, 300.0f, 0.0f),
             std::make_unique<AudioParameterFloat>("osc1gain", "Osc1Gain",  -60.0f, 0.0f, -12.0f),
@@ -38,7 +38,7 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
             std::make_unique<AudioParameterFloat>("osc2pitch", "Osc2Pitch",  0.0f, 10.0f, 1.0f),
             // Filters
             std::make_unique<AudioParameterFloat>("filt1cutoff", "Filt1Cutoff",  0.1f, 1.0f, 1.0f),
-            std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
+            //std::make_unique<AudioParameterFloat>("filt2cutoff", "Filt2Cutoff",  0.1f, 1.0f, 1.0f),
             // Distortion
             std::make_unique<AudioParameterBool>("dist1onoff", "Dist1OnOff", false),
             std::make_unique<AudioParameterFloat>("dist1inputgain", "Dist1InputGain",  -60.0f, 0.0f, 0.0f),
@@ -203,7 +203,7 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
                                         tree.getRawParameterValue("osc2pitch"));
             myVoice->getFilt1(          tree.getRawParameterValue("filt1cutoff"));
 
-            myVoice->getFilt2(          tree.getRawParameterValue("filt2cutoff"));
+            //myVoice->getFilt2(          tree.getRawParameterValue("filt2cutoff"));
 
             myVoice->getDist1(          tree.getRawParameterValue("dist1onoff"), 
                                         tree.getRawParameterValue("dist1inputgain"),

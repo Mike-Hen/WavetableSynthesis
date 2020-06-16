@@ -122,7 +122,7 @@ void Distortion::paint(Graphics& g)
     g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
 
     // Create Background
-    juce::Rectangle <float> background(0, 0, 320, 220);
+    juce::Rectangle <float> background(0, 0, 320, 210);
     g.setColour(Colours::darkgrey);
     g.fillRect(background);
 
@@ -137,18 +137,18 @@ void Distortion::paint(Graphics& g)
     g.drawText("DISTORTION", titleArea, Justification::centredTop);
 
     // Create component border
-    juce::Rectangle <float> border(0, 0, 320, 220);
+    juce::Rectangle <float> border(0, 0, 320, 210);
     g.setColour(Colours::maroon);
     g.drawRect(border);
 
     // Draw distortion curve border
-    juce::Rectangle <float> scope(10, 110, distortionImage.getWidth(), distortionImage.getHeight());
+    juce::Rectangle <float> scope(10, 105, distortionImage.getWidth(), distortionImage.getHeight());
     g.setColour(Colours::black);
     g.fillRect(scope);
 
     // Draw Grid Lines
-    juce::Line <float> xaxis(juce::Point<float>(10, (110 + (distortionImage.getHeight() / 2))), juce::Point<float>(10 + distortionImage.getWidth(), (110 + (distortionImage.getHeight() / 2))));
-    juce::Line <float> yaxis(juce::Point<float>(10 + (distortionImage.getWidth() / 2), 110), juce::Point<float>(10 + (distortionImage.getWidth() / 2), (110 + distortionImage.getHeight())));
+    juce::Line <float> xaxis(juce::Point<float>(10, (105 + (distortionImage.getHeight() / 2))), juce::Point<float>(10 + distortionImage.getWidth(), (105 + (distortionImage.getHeight() / 2))));
+    juce::Line <float> yaxis(juce::Point<float>(10 + (distortionImage.getWidth() / 2), 105), juce::Point<float>(10 + (distortionImage.getWidth() / 2), (105 + distortionImage.getHeight())));
     g.setColour(Colours::white);
     g.drawLine(xaxis, 0.3f);
     g.drawLine(yaxis, 0.3f);
@@ -182,7 +182,7 @@ void Distortion::paint(Graphics& g)
     distortionGraphic->setColour(Colours::white);
     distortionGraphic->strokePath(p, PathStrokeType(1.0f + max / 2));
     
-    g.drawImageAt(distortionImage, 10, 110);
+    g.drawImageAt(distortionImage, 10, 105);
 
 }
 
@@ -192,9 +192,9 @@ void Distortion::resized()
 
     // Position component variables
     //distOnOff.setBounds(10, 10, 100, 30);
-    inputGainSlider.setBounds(30, 30, 60, 70);
-    dryWetSlider.setBounds(150, 30, 60, 70);
-    outputGainSlider.setBounds(240, 140, 60, 70);
-    methodSelect.setBounds(240, 110, 65, 25);
+    inputGainSlider.setBounds(30, 25, 60, 70);
+    dryWetSlider.setBounds(150, 25, 60, 70);
+    outputGainSlider.setBounds(240, 135, 60, 70);
+    methodSelect.setBounds(240, 105, 65, 25);
 }
 

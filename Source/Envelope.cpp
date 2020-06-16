@@ -12,7 +12,7 @@
 Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     processor(p)
 {
-    setSize(200, 160); // Set component size
+    setSize(170, 150); // Set component size
 
     // Design attack slider
     attackSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
@@ -55,20 +55,32 @@ Envelope::~Envelope()
 
 void Envelope::paint(Graphics& g)
 {
+    // Text Font
+    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+
+    // Create Background
+    juce::Rectangle <float> background(0, 0, 170, 150);
+    g.setColour(Colours::darkgrey);
+    g.fillRect(background);
+
+    // Create Title Background
+    juce::Rectangle <float> titleBack(0, 0, 170, 25);
+    g.setColour(Colours::grey);
+    g.fillRect(titleBack);
+
     // Create component title
-    juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
-    g.fillAll(Colours::black);
-    g.setColour(Colours::white);
-    g.drawText("Envelope", titleArea, Justification::centredTop);
+    juce::Rectangle<int> titleArea(0, 5, getWidth(), 150);
+    g.setColour(Colours::black);
+    g.drawText("ENVELOPE", titleArea, Justification::centredTop);
 
     // Position slider text
-    g.drawText("A", 37, 150, 20, 20, Justification::centredTop);
-    g.drawText("D", 72, 150, 20, 20, Justification::centredTop);
-    g.drawText("S", 107, 150, 20, 20, Justification::centredTop);
-    g.drawText("R", 142, 150, 20, 20, Justification::centredTop);
+    g.drawText("A", 15, 130, 20, 20, Justification::centredTop);
+    g.drawText("D", 54, 130, 20, 20, Justification::centredTop);
+    g.drawText("S", 93, 130, 20, 20, Justification::centredTop);
+    g.drawText("R", 132, 130, 20, 20, Justification::centredTop);
 
     // Position border
-    juce::Rectangle <float> area(0, 0, 150, 150);
+    juce::Rectangle <float> area(0, 0, 170, 150);
     g.setColour(Colours::maroon);
     g.drawRect(area);
 }
@@ -85,10 +97,10 @@ void Envelope::setADSRValues(float attack, float decay, float sustain, float rel
 void Envelope::resized()
 {
     // Position ADSR controls
-    attackSlider.setBounds(10, 15, 25, 120);
-    decaySlider.setBounds(45, 15, 25, 120);
-    sustainSlider.setBounds(80, 15, 25, 120);
-    releaseSlider.setBounds(115, 15, 25, 120);
+    attackSlider.setBounds(13, 25, 25, 110);
+    decaySlider.setBounds(52, 25, 25, 110);
+    sustainSlider.setBounds(91, 25, 25, 110);
+    releaseSlider.setBounds(130, 25, 25, 110);
 }
 
 

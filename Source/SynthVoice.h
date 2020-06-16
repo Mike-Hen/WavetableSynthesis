@@ -96,6 +96,50 @@ public:
         }                                   
     }
 
+    Array<float> getOsc1WaveShape()
+    {
+        Array<float> osc1WaveShape;
+        for (int i = 0; i < wtSize; i++)
+        {
+            // Wavetable 1
+            if (osc1WtVal <= 100)
+            {
+                osc1WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)));
+            }
+            else if (osc1WtVal <= 200)
+            {
+                osc1WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100))));
+            }
+            else if (osc1WtVal <= 300)
+            {
+                osc1WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200))));
+            }
+        }
+        return osc1WaveShape;
+    }
+
+    Array<float> getOsc2WaveShape()
+    {
+        Array<float> osc2WaveShape;
+        for (int i = 0; i < wtSize; i++)
+        {
+            // Wavetable 1
+            if (osc2WtVal <= 100)
+            {
+                osc2WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc2WtVal)));
+            }
+            else if (osc2WtVal <= 200)
+            {
+                osc2WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc2WtVal - 100))));
+            }
+            else if (osc2WtVal <= 300)
+            {
+                osc2WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc2WtVal - 200))));
+            }
+        }
+        return osc2WaveShape;
+    }
+
     void prepare(float blockSize, float sampleRate, float numChannels)
     {
     }
@@ -215,14 +259,14 @@ public:
         //filt1Filt = *filt ;
         filt1Cutoff.store(*cutoff);
     }
-
-        void getFilt2(/*float* onoff, float* filt,*/ std::atomic<float>* cutoff)
+    /*
+        void getFilt2(float* onoff, float* filt, std::atomic<float>* cutoff);
     {
         //filt1OnOff = *onoff;
         //filt1Filt = *filt ;
         filt2Cutoff.store(*cutoff);
     }
-
+    */
     void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet, std::atomic<float>* distMethod)
     {
         dist1OnOff.store(*onoff);
@@ -266,7 +310,7 @@ public:
                 float nextSample = myADSR.getNextSample() * vel * masterGain * (waveTable1[(int)osc1phase] + waveTable2[(int)osc2phase]);
                 nextSample = applyDist1(nextSample);
                 nextSample = processLoFilt.process(nextSample, filt1Cutoff.load(), 0);
-                nextSample = processHiFilt.process(nextSample, filt2Cutoff.load(), 1);
+                //nextSample = processHiFilt.process(nextSample, filt2Cutoff.load(), 1);
                 outputBuffer.addSample(channel, startSample, nextSample);
             }
             osc1phase = fmod((osc1phase + osc1increment), wtSize);
@@ -310,7 +354,7 @@ private:
 
     // Filt
     std::atomic<float> filt1Cutoff;
-    std::atomic<float> filt2Cutoff;
+    //std::atomic<float> filt2Cutoff;
 
     // Dist
     std::atomic<bool> dist1OnOff;
@@ -324,5 +368,5 @@ private:
     ADSR myADSR;
     ADSR::Parameters adsrParams;
     Filtered processLoFilt;
-    Filtered processHiFilt;
+    //Filtered processHiFilt;
 };

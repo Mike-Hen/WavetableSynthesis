@@ -15,7 +15,7 @@
 Master::Master(Wsynth_v1AudioProcessor& p) :
     processor(p)
 {
-    setSize(150, 140);
+    setSize(320, 140);
 
     //===== Master gain =====//
     gainSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
@@ -23,7 +23,7 @@ Master::Master(Wsynth_v1AudioProcessor& p) :
     gainSlider.setTextBoxIsEditable(true);
     gainSlider.setColour(gainSlider.textBoxOutlineColourId, Colours::darkgrey);
     gainSlider.setNumDecimalPlacesToDisplay(1);
-    gainSlider.setRange(-60.0, 0.0);
+    gainSlider.setRange(-60.0, 6.0);
     gainSlider.setValue(-12.0);
     gainSlider.setTextValueSuffix(" dB");
     addAndMakeVisible(gainSlider);
@@ -96,12 +96,12 @@ void Master::paint (Graphics& g)
     g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
 
     // Create Background
-    juce::Rectangle <float> background(0, 0, 150, 140);
+    juce::Rectangle <float> background(0, 0, getWidth(), getHeight());
     g.setColour(Colours::darkgrey);
     g.fillRect(background);
 
     // Create Title Background
-    juce::Rectangle <float> titleBack(0, 0, 150, 25);
+    juce::Rectangle <float> titleBack(0, 0, getWidth(), 25);
     g.setColour(Colours::grey);
     g.fillRect(titleBack);
 
@@ -111,7 +111,7 @@ void Master::paint (Graphics& g)
     g.drawText("MASTER", titleArea, Justification::centredTop);
 
     // Create component border
-    juce::Rectangle <float> border(0, 0, 150, 140);
+    juce::Rectangle <float> border(0, 0, getWidth(), getHeight());
     g.setColour(Colours::maroon);
     g.drawRect(border);
 
@@ -129,13 +129,29 @@ void Master::paint (Graphics& g)
     g.setColour(Colours::grey);
     g.drawRect(levelRight);
 
-    juce::Rectangle <float> gainL(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
+    juce::Rectangle <float> gainLeftLow(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
     g.setColour(Colours::limegreen);
-    g.fillRect(gainL);
+    g.fillRect(gainLeftLow);
 
-    juce::Rectangle <float> gainR(118 + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
+    juce::Rectangle <float> gainLeftMid(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
+    g.setColour(Colours::yellow);
+    g.fillRect(gainLeftMid);
+
+    juce::Rectangle <float> gainLeftHigh(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
+    g.setColour(Colours::red);
+    g.fillRect(gainLeftHigh);
+
+    juce::Rectangle <float> gainRightLow(118 + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
     g.setColour(Colours::limegreen);
-    g.fillRect(gainR);
+    g.fillRect(gainRightLow);
+
+    juce::Rectangle <float> gainRightMid(118 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
+    g.setColour(Colours::yellow);
+    g.fillRect(gainRightMid);
+
+    juce::Rectangle <float> gainRightHigh(118 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
+    g.setColour(Colours::red);
+    g.fillRect(gainRightHigh);
 
     g.drawImageAt(masterLevelImageLeft, 100, 45);
     g.drawImageAt(masterLevelImageRight, 118, 45);
@@ -171,5 +187,5 @@ void Master::paint (Graphics& g)
 
 void Master::resized()
 {
-    gainSlider.setBounds(5, 40, 75, 100);
+    gainSlider.setBounds(5, 38, 75, 100);
 }

@@ -11,12 +11,13 @@
 //==============================================================================
 Filter::Filter(Wsynth_v1AudioProcessor& p) : processor(p)
 {
-    setSize(200, 200); // Set component size
+    setSize(320, 120); // Set component size
 
     // Design cutoff slider
     cutoffSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     cutoffSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     cutoffSlider.setTextBoxIsEditable(true);
+    cutoffSlider.setColour(cutoffSlider.textBoxOutlineColourId, Colours::darkgrey);
     cutoffSlider.setNumDecimalPlacesToDisplay(0);
     cutoffSlider.setRange(0.0, 1.0);
     cutoffSlider.setValue(0.5);
@@ -62,14 +63,26 @@ void Filter::buttonClicked(Button* button)
 
 void Filter::paint(Graphics& g)
 {
+    // Text Font
+    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+
+    // Create Background
+    juce::Rectangle <float> background(0, 0, 320, 120);
+    g.setColour(Colours::darkgrey);
+    g.fillRect(background);
+
+    // Create Title Background
+    juce::Rectangle <float> titleBack(0, 0, 320, 25);
+    g.setColour(Colours::grey);
+    g.fillRect(titleBack);
+
     // Create component title
-    juce::Rectangle<int> titleArea(0, 10, 120, 20);
-    g.fillAll(Colours::black);
-    g.setColour(Colours::white);
+    juce::Rectangle<int> titleArea(0, 5, 320, 40);
+    g.setColour(Colours::black);
     g.drawText("Filter", titleArea, Justification::centredTop);
 
     // Create component border
-    juce::Rectangle <float> area(0, 0, 80, 120);
+    juce::Rectangle <float> area(0, 0, 320, 120);
     g.setColour(Colours::maroon);
     g.drawRect(area);
 
@@ -77,14 +90,8 @@ void Filter::paint(Graphics& g)
 
 void Filter::resized()
 {
-    juce::Rectangle<int> area = getLocalBounds().reduced(50);
-
-    int sliderWidth = 75;
-    int sliderHeight = 100;
-
     // Position component variables
     //filtOnOff.setBounds(10, 10, 100, 30);
     //filterSelect.setBounds(10, 60, 100, 50);
-    cutoffSlider.setBounds(10, 10, 60, 100);
-    
+    cutoffSlider.setBounds(10, 30, 60, 80);
 }

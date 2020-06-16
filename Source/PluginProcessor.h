@@ -66,6 +66,7 @@ public:
     {
         return history;
     }
+
     Array<float> masterLevelLeft;
     Array<float> masterLevelRight;
     int masterLevelLength;
@@ -79,6 +80,19 @@ public:
         {
             return masterLevelRight;
         }
+    }
+
+    Array<float> osc1WaveShape;
+    Array<float> returnOsc1WaveShape()
+    {
+        osc1WaveShape = myVoice->getOsc1WaveShape();
+        return osc1WaveShape;
+    }
+    Array<float> osc2WaveShape;
+    Array<float> returnOsc2WaveShape()
+    {
+        osc2WaveShape = myVoice->getOsc2WaveShape();
+        return osc2WaveShape;
     }
 
 private:

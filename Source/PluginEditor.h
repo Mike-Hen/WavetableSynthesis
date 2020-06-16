@@ -41,7 +41,7 @@ private:
     ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> filt1OnOffVal;
     ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filt1CutoffVal;
     ScopedPointer<AudioProcessorValueTreeState::ComboBoxAttachment> filt1Val;
-    ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filt2CutoffVal;
+    //ScopedPointer<AudioProcessorValueTreeState::SliderAttachment> filt2CutoffVal;
 
     // Distortion values
     ScopedPointer<AudioProcessorValueTreeState::ButtonAttachment> dist1OnOffVal;
@@ -67,7 +67,7 @@ private:
     // Create synth components
     Master master;
     Filter filt1;
-    Filter filt2;
+    //Filter filt2;
     Distortion dist1;
     Oscillator oscGui;
     Envelope envGui;

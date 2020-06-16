@@ -16,7 +16,7 @@ OscScope::OscScope(Wsynth_v1AudioProcessor& p) :
 {
     startTimer(1000 / 100);
 
-    historyImage = Image(juce::Image::ARGB, 500, 200, true);
+    historyImage = Image(juce::Image::ARGB, 470, 150, true);
     historyGraphic = new Graphics(historyImage);
 }
 
@@ -55,8 +55,6 @@ void OscScope::paint (Graphics& g)
         }
         else p.lineTo(i, val);
     }
-    //max = FloatVectorOperations::findMaximum(history.getRawDataPointer(), history.size());
-    //max = jlimit<float>(0, 2, max);
 
     if (p.isEmpty()) return;
     if (p.getBounds().getWidth() < 0.01) return;
