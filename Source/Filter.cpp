@@ -1,7 +1,7 @@
 /*
   ==============================================================================
     Filter.cpp
-    Author:  MHENDER4
+    Author:  MikeHen
   ==============================================================================
 */
 
@@ -14,7 +14,7 @@ Filter::Filter(Wsynth_v1AudioProcessor& p) : processor(p)
     setSize(320, 120); // Set component size
 
     // Design cutoff slider
-    cutoffSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    cutoffSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     cutoffSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     cutoffSlider.setTextBoxIsEditable(true);
     cutoffSlider.setColour(cutoffSlider.textBoxOutlineColourId, Colours::darkgrey);
@@ -22,6 +22,7 @@ Filter::Filter(Wsynth_v1AudioProcessor& p) : processor(p)
     cutoffSlider.setRange(0.0, 1.0);
     cutoffSlider.setValue(0.5);
     cutoffSlider.setTextValueSuffix(" ");
+    cutoffSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&cutoffSlider);
 
     /* Filter select combo box
@@ -77,9 +78,9 @@ void Filter::paint(Graphics& g)
     g.fillRect(titleBack);
 
     // Create component title
-    juce::Rectangle<int> titleArea(0, 5, 320, 40);
+    juce::Rectangle<int> titleArea(5, 5, 320, 40);
     g.setColour(Colours::black);
-    g.drawText("filter", titleArea, Justification::centredTop);
+    g.drawText("filter", titleArea, Justification::topLeft);
 
     // Create component border
     //juce::Rectangle <float> area(0, 0, 320, 120);
@@ -93,5 +94,5 @@ void Filter::resized()
     // Position component variables
     //filtOnOff.setBounds(10, 10, 100, 30);
     //filterSelect.setBounds(10, 60, 100, 50);
-    cutoffSlider.setBounds(10, 30, 60, 80);
+    cutoffSlider.setBounds(10, 40, 55, 60);
 }

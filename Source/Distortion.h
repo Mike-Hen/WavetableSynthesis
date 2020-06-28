@@ -8,6 +8,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "OtherLookAndFeel.h"
 
 //==============================================================================
 
@@ -34,6 +35,8 @@ public:
 
     Image distortionImage;
     ScopedPointer<Graphics> distortionGraphic;
+
+    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

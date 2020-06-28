@@ -8,6 +8,7 @@
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "OtherLookAndFeel.h"
 
 
 class Oscillator : public Component,
@@ -57,6 +58,8 @@ public:
 
     Image osc2Image;
     ScopedPointer<Graphics> osc2Graphic;
+
+    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

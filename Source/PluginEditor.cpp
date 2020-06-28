@@ -12,7 +12,7 @@
 Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p), oscGui(p), filt1(p), /*filt2(p),*/ dist1(p), envGui(p), signalScope(p), master (p)
 {
-    setSize (1000, 510); // Set synth size
+    setSize (1050, 489); // Set synth size
 
     //===== Setup ADSR presets =====//
     /*
@@ -207,18 +207,29 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
     juce::Rectangle <float> area(0, 0, getWidth(), getHeight());
     g.setColour(Colours::lightgrey);
     g.fillRect(area);
+
+    // Name Line
+    juce::Rectangle <float> nameLine(979, 3, 2, getHeight() - 6);
+    g.setColour(Colours::black);
+    g.fillRect(nameLine);
+
+    // Name
+    g.setFont(Font("Avenir", 20.0f, Font::bold));
+    juce::Rectangle<int> titleArea(982, 3, 60, getHeight() - 6);
+    g.drawText("TANIN.", titleArea, Justification::topLeft);
+    g.setColour(Colours::black);
 }
 
 void Wsynth_v1AudioProcessorEditor::resized()
 {
     // Position components
-    master.setBounds(getWidth() - 320 - 10, 10, 320, 140);
-    oscGui.setBounds(10, 10, 650, 330);
-    envGui.setBounds(10, 350, 170, 150);
-    filt1.setBounds(getWidth() - 320 - 10, 160, 320, 120);
+    master.setBounds(656, 3, 320, 140);
+    oscGui.setBounds(3, 3, 650, 330);
+    envGui.setBounds(3, getHeight() - 150 -3, 170, 150);
+    filt1.setBounds(656, 146, 320, 120);
     //filt2.setBounds(500, 10, 80, 120);
-    dist1.setBounds(getWidth() - 320 - 10, getHeight() - 210 - 10, 320, 210);
-    signalScope.setBounds(190, getHeight() - 150 - 10, 470, 150);
+    dist1.setBounds(656, 269, 320, 217);
+    signalScope.setBounds(176, getHeight() - 150 - 3, 470, 150);
 
     // Position ADSR preset buttons
     /*

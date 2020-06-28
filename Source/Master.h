@@ -11,6 +11,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "OtherLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -34,6 +35,8 @@ public:
 
     Image masterLevelImageLeft;
     Image masterLevelImageRight;
+
+    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

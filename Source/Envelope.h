@@ -9,6 +9,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "OtherLookAndFeel.h"
 
 //==============================================================================
 
@@ -28,6 +29,8 @@ public:
     Slider decaySlider;
     Slider sustainSlider;
     Slider releaseSlider;
+
+    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

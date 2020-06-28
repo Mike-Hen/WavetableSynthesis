@@ -14,31 +14,31 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     setSize(650, 330); // Set component size
 
     // Design wavetable slider
-    osc1WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    osc1WtSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc1WtSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc1WtSlider.setTextBoxIsEditable(true);
     osc1WtSlider.addListener(this);
     osc1WtSlider.setColour(osc1WtSlider.textBoxOutlineColourId, Colours::darkgrey);
-    osc1WtSlider.setNumDecimalPlacesToDisplay(1);
+    osc1WtSlider.setNumDecimalPlacesToDisplay(0);
     osc1WtSlider.setRange(0.0, 300.0);
     osc1WtSlider.setValue(0.0);
-    osc1WtSlider.setTextValueSuffix(" colour");
+    osc1WtSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&osc1WtSlider);
 
     // Design wavetable slider
-    osc2WtSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    osc2WtSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc2WtSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2WtSlider.setTextBoxIsEditable(true);
     osc2WtSlider.addListener(this);
     osc2WtSlider.setColour(osc2WtSlider.textBoxOutlineColourId, Colours::darkgrey);
-    osc2WtSlider.setNumDecimalPlacesToDisplay(1);
+    osc2WtSlider.setNumDecimalPlacesToDisplay(0);
     osc2WtSlider.setRange(0.0, 300.0);
     osc2WtSlider.setValue(0.0);
-    osc2WtSlider.setTextValueSuffix(" colour");
+    osc2WtSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&osc2WtSlider);
 
     // Design gain slider
-    osc1GainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    osc1GainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc1GainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc1GainSlider.setTextBoxIsEditable(true);
     osc1GainSlider.setColour(osc1GainSlider.textBoxOutlineColourId, Colours::darkgrey);
@@ -46,10 +46,11 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1GainSlider.setRange(-60.0, 0.0);
     osc1GainSlider.setValue(-12.0);
     osc1GainSlider.setTextValueSuffix(" dB");
+    osc1GainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&osc1GainSlider);
 
     // Design gain slider
-    osc2GainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    osc2GainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     osc2GainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     osc2GainSlider.setTextBoxIsEditable(true);
     osc2GainSlider.setColour(osc2GainSlider.textBoxOutlineColourId, Colours::darkgrey);
@@ -57,6 +58,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2GainSlider.setRange(-60.0, 0.0);
     osc2GainSlider.setValue(-12.0);
     osc2GainSlider.setTextValueSuffix(" dB");
+    osc2GainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&osc2GainSlider);
 
     // Design pitch slider
@@ -122,11 +124,12 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2Fine.setSize(30, 30);
     addAndMakeVisible(&osc2Fine);
 
-    
-    osc1Image = Image(juce::Image::ARGB, getWidth() / 2 - 25, 230, true);
+    float oscWidth = getWidth() / 2 - 25;
+    float oscHeight = 230;
+    osc1Image = Image(juce::Image::ARGB, oscWidth, oscHeight, true);
     osc1Graphic = new Graphics(osc1Image);
 
-    osc2Image = Image(juce::Image::ARGB, getWidth() / 2 - 25, 230, true);
+    osc2Image = Image(juce::Image::ARGB, oscWidth, oscHeight, true);
     osc2Graphic = new Graphics(osc2Image);
     
     /* Waveform select combo box
@@ -261,10 +264,10 @@ void Oscillator::paint(Graphics& g)
     g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create component borders
-    juce::Rectangle <float> box1area(0, 0, getWidth() / 2 - 5, getHeight());
-    juce::Rectangle <float> box2area(getWidth() / 2 + 5, 0, getWidth() / 2 - 5, getHeight());
-    juce::Rectangle <float> box1title(0, 0, getWidth() / 2 - 5, 25);
-    juce::Rectangle <float> box2title(getWidth() / 2 + 5, 0, getWidth() / 2 - 5, 25);
+    juce::Rectangle <float> box1area(0, 0, getWidth() / 2 - 1.5f, getHeight());
+    juce::Rectangle <float> box2area(getWidth() / 2 + 1.5f, 0, getWidth() / 2 - 1.5f, getHeight());
+    juce::Rectangle <float> box1title(0, 0, getWidth() / 2 - 1.5f, 25);
+    juce::Rectangle <float> box2title(getWidth() / 2 + 1.5f, 0, getWidth() / 2 - 1.5f, 25);
     g.setColour(Colours::darkgrey);
     g.fillRect(box1area);
     g.fillRect(box2area);
@@ -276,11 +279,11 @@ void Oscillator::paint(Graphics& g)
     //g.drawRect(box2area);
 
     // Create component title
-    juce::Rectangle<int> title1Area(0, 5, getWidth() / 2 - 5, 40);
-    juce::Rectangle<int> title2Area(getWidth() / 2 + 5, 5, getWidth() / 2 - 5, 40);
+    juce::Rectangle<int> title1Area(5, 5, getWidth() / 2 - 5, 40);
+    juce::Rectangle<int> title2Area(getWidth() / 2 + 5 + 5, 5, getWidth() / 2 - 5, 40);
     g.setColour(Colours::black);
-    g.drawText("osc 1", title1Area, Justification::centredTop);
-    g.drawText("osc 2", title2Area, Justification::centredTop);
+    g.drawText("osc 1", title1Area, Justification::topLeft);
+    g.drawText("osc 2", title2Area, Justification::topLeft);
 
     juce::Rectangle <float> osc1(10, 35, osc1Image.getWidth(), osc1Image.getHeight());
     g.setColour(Colours::black);
@@ -379,10 +382,10 @@ void Oscillator::resized()
 
     // Position component variables
     //waveformSelect.setBounds(40, 60, 100, 50);
-    osc1WtSlider.setBounds(30, 255, 60, 100);
-    osc2WtSlider.setBounds(getWidth() - 30 - 60, 255, 60, 100);
-    osc1GainSlider.setBounds(120, 255, 60, 100);
-    osc2GainSlider.setBounds(getWidth() - 120 - 60, 255, 60, 100);
+    osc1WtSlider.setBounds(30, 270, 55, 60);
+    osc2WtSlider.setBounds(getWidth() - 30 - 60, 270, 55, 60);
+    osc1GainSlider.setBounds(120, 270, 55, 60);
+    osc2GainSlider.setBounds(getWidth() - 120 - 60, 270, 55, 60);
     //osc1PitchSlider.setBounds(210, 285, 70, 40);
     osc1CentUp.setBounds(250, 265, 70, 40);
     osc1Cent.setBounds(240, 280, 70, 40);

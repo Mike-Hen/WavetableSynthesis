@@ -19,6 +19,10 @@
       <FILE id="apaety" name="Filtered.h" compile="0" resource="0" file="Source/Filtered.h"/>
       <FILE id="Ed53eW" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
       <FILE id="Zb7Kd3" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
+      <FILE id="UsqR0S" name="OtherLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/OtherLookAndFeel.cpp"/>
+      <FILE id="it1iAZ" name="OtherLookAndFeel.h" compile="0" resource="0"
+            file="Source/OtherLookAndFeel.h"/>
       <FILE id="ZCVNZM" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
       <FILE id="yBccnR" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
       <FILE id="pfQKJL" name="PluginProcessor.cpp" compile="1" resource="0"

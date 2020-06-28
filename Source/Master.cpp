@@ -26,6 +26,7 @@ Master::Master(Wsynth_v1AudioProcessor& p) :
     gainSlider.setRange(-60.0, 6.0);
     gainSlider.setValue(-12.0);
     gainSlider.setTextValueSuffix(" dB");
+    gainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(gainSlider);
 
     masterLevelImageLeft = Image(juce::Image::ARGB, 15, 60, true);
@@ -106,66 +107,69 @@ void Master::paint (Graphics& g)
     g.fillRect(titleBack);
 
     // Create component title
-    juce::Rectangle<int> titleArea(0, 5, getWidth(), 40);
+    juce::Rectangle<int> titleArea(5, 5, getWidth(), 40);
     g.setColour(Colours::black);
-    g.drawText("master", titleArea, Justification::centredTop);
+    g.drawText("master", titleArea, Justification::topLeft);
 
     // Create component border
     juce::Rectangle <float> border(0, 0, getWidth(), getHeight());
     //g.setColour(Colours::maroon);
    // g.drawRect(border);
 
+    int leftDrawPos = 270;
+    int rightDrawPos = 288;
+
     // Draw master level border
-    juce::Rectangle <float> levelLeft(100, 45, masterLevelImageLeft.getWidth(), masterLevelImageLeft.getHeight());
+    juce::Rectangle <float> levelLeft(leftDrawPos, 45, masterLevelImageLeft.getWidth(), masterLevelImageLeft.getHeight());
     g.setColour(Colours::black);
     g.fillRect(levelLeft);
     g.setColour(Colours::grey);
     g.drawRect(levelLeft);
 
     // Draw master level border
-    juce::Rectangle <float> levelRight(118, 45, masterLevelImageRight.getWidth(), masterLevelImageRight.getHeight());
+    juce::Rectangle <float> levelRight(rightDrawPos, 45, masterLevelImageRight.getWidth(), masterLevelImageRight.getHeight());
     g.setColour(Colours::black);
     g.fillRect(levelRight);
     g.setColour(Colours::grey);
     g.drawRect(levelRight);
 
-    juce::Rectangle <float> gainLeftLow(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
+    juce::Rectangle <float> gainLeftLow(leftDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
     g.setColour(Colours::limegreen);
     g.fillRect(gainLeftLow);
 
-    juce::Rectangle <float> gainLeftMid(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
+    juce::Rectangle <float> gainLeftMid(leftDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
     g.setColour(Colours::yellow);
     g.fillRect(gainLeftMid);
 
-    juce::Rectangle <float> gainLeftHigh(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
+    juce::Rectangle <float> gainLeftHigh(leftDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
     g.setColour(Colours::red);
     g.fillRect(gainLeftHigh);
 
-    juce::Rectangle <float> gainRightLow(118 + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
+    juce::Rectangle <float> gainRightLow(rightDrawPos + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
     g.setColour(Colours::limegreen);
     g.fillRect(gainRightLow);
 
-    juce::Rectangle <float> gainRightMid(118 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
+    juce::Rectangle <float> gainRightMid(rightDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 47);
     g.setColour(Colours::yellow);
     g.fillRect(gainRightMid);
 
-    juce::Rectangle <float> gainRightHigh(118 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
+    juce::Rectangle <float> gainRightHigh(rightDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4 - 53);
     g.setColour(Colours::red);
     g.fillRect(gainRightHigh);
 
-    g.drawImageAt(masterLevelImageLeft, 100, 45);
-    g.drawImageAt(masterLevelImageRight, 118, 45);
+    g.drawImageAt(masterLevelImageLeft, leftDrawPos, 45);
+    g.drawImageAt(masterLevelImageRight, rightDrawPos, 45);
 
     float currentLevelLeft = getLevelLeft();
     if (currentLevelLeft > -60.0f)
     {
-        juce::Rectangle <float> gainL(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, -currentLevelLeft);
+        juce::Rectangle <float> gainL(leftDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, -currentLevelLeft);
         g.setColour(Colours::black);
         g.fillRect(gainL);
     }
     else
     {
-        juce::Rectangle <float> blankGainL(100 + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
+        juce::Rectangle <float> blankGainL(leftDrawPos + 2, 45 + 2, masterLevelImageLeft.getWidth() - 4, masterLevelImageLeft.getHeight() - 4);
         g.setColour(Colours::black);
         g.fillRect(blankGainL);
     }
@@ -173,13 +177,13 @@ void Master::paint (Graphics& g)
     float currentLevelRight = getLevelRight();
     if (currentLevelRight > -60.0f)
     {
-        juce::Rectangle <float> gainR(118 + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, -currentLevelRight);
+        juce::Rectangle <float> gainR(rightDrawPos + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, -currentLevelRight);
         g.setColour(Colours::black);
         g.fillRect(gainR);
     }
     else
     {
-        juce::Rectangle <float> blankGainR(118 + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
+        juce::Rectangle <float> blankGainR(rightDrawPos + 2, 45 + 2, masterLevelImageRight.getWidth() - 4, masterLevelImageRight.getHeight() - 4);
         g.setColour(Colours::black);
         g.fillRect(blankGainR);
     }
@@ -187,5 +191,5 @@ void Master::paint (Graphics& g)
 
 void Master::resized()
 {
-    gainSlider.setBounds(5, 38, 75, 100);
+    gainSlider.setBounds(190, 38, 75, 100);
 }

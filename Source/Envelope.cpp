@@ -19,6 +19,7 @@ Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     attackSlider.setRange(0.1f, 5.0f);
     attackSlider.setValue(0.1f);
     attackSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+    attackSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&attackSlider);
 
     // Design decay slider
@@ -26,6 +27,7 @@ Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     decaySlider.setRange(0.1f, 2.0f);
     decaySlider.setValue(0.8f);
     decaySlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+    decaySlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&decaySlider);
 
     // Design sustain slider
@@ -33,6 +35,7 @@ Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     sustainSlider.setRange(0.1f, 1.0f);
     sustainSlider.setValue(0.8f);
     sustainSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+    sustainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&sustainSlider);
 
     // Design release slider
@@ -40,6 +43,7 @@ Envelope::Envelope(Wsynth_v1AudioProcessor& p) :
     releaseSlider.setRange(0.1f, 5.0f);
     releaseSlider.setValue(0.8f);
     releaseSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+    releaseSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&releaseSlider);
 
     //sends value of the sliders to the tree state in the processor
@@ -69,9 +73,9 @@ void Envelope::paint(Graphics& g)
     g.fillRect(titleBack);
 
     // Create component title
-    juce::Rectangle<int> titleArea(0, 5, getWidth(), 150);
+    juce::Rectangle<int> titleArea(5, 5, getWidth(), 150);
     g.setColour(Colours::black);
-    g.drawText("envelope", titleArea, Justification::centredTop);
+    g.drawText("envelope", titleArea, Justification::topLeft);
 
     // Position slider text
     g.drawText("A", 15, 130, 20, 20, Justification::centredTop);

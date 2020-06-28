@@ -1,13 +1,14 @@
 /*
   ==============================================================================
     Filter.h
-    Author:  MHENDER4
+    Author:  MikeHen
   ==============================================================================
 */
 
 #pragma once
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "OtherLookAndFeel.h"
 
 
 class Filter : public Component,
@@ -26,6 +27,7 @@ public:
     Slider cutoffSlider;
     ComboBox filterSelect;
     TextButton filtOnOff;
+    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

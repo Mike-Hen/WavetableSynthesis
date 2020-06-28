@@ -17,8 +17,8 @@ Distortion::Distortion(Wsynth_v1AudioProcessor& p) : processor(p)
     setSize(300, 300); // Set component size
 
     // Design input gain slider
-    inputGainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
-    inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 15);
+    inputGainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    inputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     inputGainSlider.setTextBoxIsEditable(true);
     inputGainSlider.setColour(inputGainSlider.textBoxOutlineColourId, Colours::darkgrey);
     inputGainSlider.setNumDecimalPlacesToDisplay(1);
@@ -26,28 +26,31 @@ Distortion::Distortion(Wsynth_v1AudioProcessor& p) : processor(p)
     inputGainSlider.setValue(0.0);
     inputGainSlider.setTextValueSuffix(" dB");
     inputGainSlider.addListener(this);
+    inputGainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&inputGainSlider);
 
     // Design output gain slider
-    outputGainSlider.setSliderStyle(Slider::SliderStyle::Rotary);
-    outputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 15);
+    outputGainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    outputGainSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     outputGainSlider.setTextBoxIsEditable(true);
     outputGainSlider.setColour(outputGainSlider.textBoxOutlineColourId, Colours::darkgrey);
     outputGainSlider.setNumDecimalPlacesToDisplay(1);
     outputGainSlider.setRange(-20.0, 20.0);
     outputGainSlider.setValue(0.0);
     outputGainSlider.setTextValueSuffix(" dB");
+    outputGainSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&outputGainSlider);
 
     // Design dry/wet slider
-    dryWetSlider.setSliderStyle(Slider::SliderStyle::Rotary);
-    dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 15);
+    dryWetSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    dryWetSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 200, 25);
     dryWetSlider.setTextBoxIsEditable(true);
     dryWetSlider.setColour(dryWetSlider.textBoxOutlineColourId, Colours::darkgrey);
     dryWetSlider.setNumDecimalPlacesToDisplay(0);
     dryWetSlider.setRange(0.0, 100.0);
     dryWetSlider.setValue(0.0);
     dryWetSlider.setTextValueSuffix(" %");
+    dryWetSlider.setLookAndFeel(&otherLookAndFeel);
     addAndMakeVisible(&dryWetSlider);
     
     // method select combo box
@@ -122,7 +125,7 @@ void Distortion::paint(Graphics& g)
     g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create Background
-    juce::Rectangle <float> background(0, 0, 320, 210);
+    juce::Rectangle <float> background(0, 0, 320, 217);
     g.setColour(Colours::darkgrey);
     g.fillRect(background);
 
@@ -132,9 +135,9 @@ void Distortion::paint(Graphics& g)
     g.fillRect(titleBack);
 
     // Create component title
-    juce::Rectangle<int> titleArea(0, 5, getWidth(), 40);
+    juce::Rectangle<int> titleArea(5, 5, getWidth(), 40);
     g.setColour(Colours::black);
-    g.drawText("distortion", titleArea, Justification::centredTop);
+    g.drawText("distortion", titleArea, Justification::topLeft);
 
     // Create component border
     //juce::Rectangle <float> border(0, 0, 320, 210);
@@ -192,9 +195,9 @@ void Distortion::resized()
 
     // Position component variables
     //distOnOff.setBounds(10, 10, 100, 30);
-    inputGainSlider.setBounds(30, 25, 60, 70);
-    dryWetSlider.setBounds(150, 25, 60, 70);
-    outputGainSlider.setBounds(240, 135, 60, 70);
+    inputGainSlider.setBounds(30, 40, 55, 60);
+    dryWetSlider.setBounds(150, 40, 55, 60);
+    outputGainSlider.setBounds(240, 150, 55, 60);
     methodSelect.setBounds(240, 105, 65, 25);
 }
 
