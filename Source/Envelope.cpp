@@ -56,7 +56,7 @@ Envelope::~Envelope()
 void Envelope::paint(Graphics& g)
 {
     // Text Font
-    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+    g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create Background
     juce::Rectangle <float> background(0, 0, 170, 150);
@@ -71,7 +71,7 @@ void Envelope::paint(Graphics& g)
     // Create component title
     juce::Rectangle<int> titleArea(0, 5, getWidth(), 150);
     g.setColour(Colours::black);
-    g.drawText("ENVELOPE", titleArea, Justification::centredTop);
+    g.drawText("envelope", titleArea, Justification::centredTop);
 
     // Position slider text
     g.drawText("A", 15, 130, 20, 20, Justification::centredTop);
@@ -81,8 +81,8 @@ void Envelope::paint(Graphics& g)
 
     // Position border
     juce::Rectangle <float> area(0, 0, 170, 150);
-    g.setColour(Colours::maroon);
-    g.drawRect(area);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(area);
 }
 
 void Envelope::setADSRValues(float attack, float decay, float sustain, float release)

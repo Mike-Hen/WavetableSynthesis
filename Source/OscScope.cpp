@@ -33,8 +33,8 @@ void OscScope::timerCallback()
 void OscScope::paint (Graphics& g)
 {
     juce::Rectangle <float> area(0, 0, historyImage.getWidth(), historyImage.getHeight());
-    g.setColour(Colours::maroon);
-    g.drawRect(area);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(area);
 
     // Osc
     Path p;
@@ -64,7 +64,7 @@ void OscScope::paint (Graphics& g)
 
     historyImage.multiplyAllAlphas(0);
 
-    historyGraphic->setColour(Colours::white);
+    historyGraphic->setColour(Colours::darkgrey);
     historyGraphic->strokePath(p, PathStrokeType(0.5f + max / 2));
 
     g.drawImageAt(historyImage, 0, 0);

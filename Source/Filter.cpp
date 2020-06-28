@@ -64,7 +64,7 @@ void Filter::buttonClicked(Button* button)
 void Filter::paint(Graphics& g)
 {
     // Text Font
-    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+    g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create Background
     juce::Rectangle <float> background(0, 0, 320, 120);
@@ -79,12 +79,12 @@ void Filter::paint(Graphics& g)
     // Create component title
     juce::Rectangle<int> titleArea(0, 5, 320, 40);
     g.setColour(Colours::black);
-    g.drawText("Filter", titleArea, Justification::centredTop);
+    g.drawText("filter", titleArea, Justification::centredTop);
 
     // Create component border
-    juce::Rectangle <float> area(0, 0, 320, 120);
-    g.setColour(Colours::maroon);
-    g.drawRect(area);
+    //juce::Rectangle <float> area(0, 0, 320, 120);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(area);
 
 }
 

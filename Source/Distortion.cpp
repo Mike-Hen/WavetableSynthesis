@@ -119,7 +119,7 @@ Array<float> Distortion::getDistortionCurve(int distLength)
 void Distortion::paint(Graphics& g)
 {
     // Text Font
-    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+    g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create Background
     juce::Rectangle <float> background(0, 0, 320, 210);
@@ -134,12 +134,12 @@ void Distortion::paint(Graphics& g)
     // Create component title
     juce::Rectangle<int> titleArea(0, 5, getWidth(), 40);
     g.setColour(Colours::black);
-    g.drawText("DISTORTION", titleArea, Justification::centredTop);
+    g.drawText("distortion", titleArea, Justification::centredTop);
 
     // Create component border
-    juce::Rectangle <float> border(0, 0, 320, 210);
-    g.setColour(Colours::maroon);
-    g.drawRect(border);
+    //juce::Rectangle <float> border(0, 0, 320, 210);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(border);
 
     // Draw distortion curve border
     juce::Rectangle <float> scope(10, 105, distortionImage.getWidth(), distortionImage.getHeight());

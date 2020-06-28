@@ -258,7 +258,7 @@ void Oscillator::sliderValueChanged(Slider* slider)
 void Oscillator::paint(Graphics& g)
 {
     // Text Font
-    g.setFont(Font("Franklin Gothic", 20.0f, Font::bold));
+    g.setFont(Font("Avenir", 20.0f, Font::bold));
 
     // Create component borders
     juce::Rectangle <float> box1area(0, 0, getWidth() / 2 - 5, getHeight());
@@ -271,16 +271,16 @@ void Oscillator::paint(Graphics& g)
     g.setColour(Colours::grey);
     g.fillRect(box1title);
     g.fillRect(box2title);
-    g.setColour(Colours::maroon);
-    g.drawRect(box1area);
-    g.drawRect(box2area);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(box1area);
+    //g.drawRect(box2area);
 
     // Create component title
     juce::Rectangle<int> title1Area(0, 5, getWidth() / 2 - 5, 40);
     juce::Rectangle<int> title2Area(getWidth() / 2 + 5, 5, getWidth() / 2 - 5, 40);
     g.setColour(Colours::black);
-    g.drawText("OSC 1", title1Area, Justification::centredTop);
-    g.drawText("OSC 2", title2Area, Justification::centredTop);
+    g.drawText("osc 1", title1Area, Justification::centredTop);
+    g.drawText("osc 2", title2Area, Justification::centredTop);
 
     juce::Rectangle <float> osc1(10, 35, osc1Image.getWidth(), osc1Image.getHeight());
     g.setColour(Colours::black);
@@ -304,11 +304,11 @@ void Oscillator::paint(Graphics& g)
     g.drawLine(osc2xaxis, 0.3f);
     g.drawLine(osc2yaxis, 0.3f);
 
-    g.setColour(Colours::maroon);
-    g.drawRect(osc1);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(osc1);
 
-    g.setColour(Colours::maroon);
-    g.drawRect(osc2);
+    //g.setColour(Colours::maroon);
+    //g.drawRect(osc2);
 
     Path p1;
     float max = 0;

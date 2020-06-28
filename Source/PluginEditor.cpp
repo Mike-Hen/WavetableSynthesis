@@ -205,8 +205,8 @@ void Wsynth_v1AudioProcessorEditor::paint (Graphics& g)
 
     // Create synth border
     juce::Rectangle <float> area(0, 0, getWidth(), getHeight());
-    g.setColour(Colours::darkred);
-    g.drawRect(area, 4.0f);
+    g.setColour(Colours::lightgrey);
+    g.fillRect(area);
 }
 
 void Wsynth_v1AudioProcessorEditor::resized()
