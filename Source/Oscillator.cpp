@@ -89,6 +89,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1CentDown.addListener(this);
     addAndMakeVisible(&osc1CentDown);
 
+    // Design Osc 1 Pitch Fine Up Button
     osc1FineUp.setSize(15, 15);
     osc1FineUp.addListener(this);
     addAndMakeVisible(&osc1FineUp);
@@ -96,6 +97,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1FineDown.addListener(this);
     addAndMakeVisible(&osc1FineDown);
 
+    // Design Osc 2 Pitch Cent Up Button
     osc2CentUp.setSize(15, 15);
     osc2CentUp.addListener(this);
     addAndMakeVisible(&osc2CentUp);
@@ -103,6 +105,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2CentDown.addListener(this);
     addAndMakeVisible(&osc2CentDown);
 
+    // Design Osc 2 Pitch Fine Up Button
     osc2FineUp.setSize(15, 15);
     osc2FineUp.addListener(this);
     addAndMakeVisible(&osc2FineUp);
@@ -110,6 +113,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc2FineDown.addListener(this);
     addAndMakeVisible(&osc2FineDown);
 
+    // Osc 1 Fine and Cent text
     osc1Cent.setButtonText(String(osc1CentValue));
     osc1Cent.setSize(30, 30);
     addAndMakeVisible(&osc1Cent);
@@ -117,6 +121,7 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
     osc1Fine.setSize(30, 30);
     addAndMakeVisible(&osc1Fine);
 
+    // Osc 2 Fine and Cent text
     osc2Cent.setButtonText(String(osc1CentValue));
     osc2Cent.setSize(30, 30);
     addAndMakeVisible(&osc2Cent);
@@ -131,23 +136,6 @@ Oscillator::Oscillator(Wsynth_v1AudioProcessor& p) : processor(p)
 
     osc2Image = Image(juce::Image::ARGB, oscWidth, oscHeight, true);
     osc2Graphic = new Graphics(osc2Image);
-    
-    /* Waveform select combo box
-    String wave1 = "sine";
-    String wave2 = "square";
-    String wave3 = "sawtooth";
-    String wave4 = "triangle";
-    waveformSelect.addItem(wave1, 1);
-    waveformSelect.addItem(wave2, 2);
-    waveformSelect.addItem(wave3, 3);
-    waveformSelect.addItem(wave4, 4);
-    waveformSelect.setSelectedItemIndex(0, true);
-    addAndMakeVisible(waveformSelect);
-
-    sends value of the sliders to the tree state in the processor
-    oscGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "osc1gain", oscGainSlider);
-    waveformVal = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "waveform1", waveformSelect);
-    */
 
 }
 
@@ -400,5 +388,5 @@ void Oscillator::resized()
     osc2FineUp.setBounds(getWidth() - 165 - 70, 265, 70, 40);
     osc2Fine.setBounds(getWidth() - 175 - 70, 280, 70, 40);
     osc2FineDown.setBounds(getWidth() - 165 - 70, 313, 70, 40);
-    
 }
+

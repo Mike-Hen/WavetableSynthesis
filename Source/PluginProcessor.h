@@ -95,6 +95,10 @@ public:
         return osc2WaveShape;
     }
 
+    std::array<dsp::Complex<float>, 4096> osc1BLWT;
+
+    AudioProcessorEditor* getEditor() const noexcept;
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Wsynth_v1AudioProcessor)
 };

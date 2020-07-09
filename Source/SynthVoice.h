@@ -9,6 +9,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SynthSound.h"
 #include "Filtered.h"
+#include "Wavetable.h"
+#include <complex> 
 #define _USE_MATH_DEFINES
 #include "math.h"
 
@@ -19,6 +21,9 @@ class SynthVoice : public SynthesiserVoice
 public:
     SynthVoice()
     {
+        osc1WtVal.store(0);
+        osc2WtVal.store(0);
+        //oversamp->initProcessing(480);
     //===== Setup Waveforms =====//
         // Sine
         for (int i = 0; i < wtSize; i++)
@@ -99,24 +104,25 @@ public:
     Array<float> getOsc1WaveShape()
     {
         Array<float> osc1WaveShape;
-        for (int i = 0; i < wtSize; i++)
-        {
-            // Wavetable 1
-            if (osc1WtVal <= 100)
-            {
-                osc1WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)));
-            }
-            else if (osc1WtVal <= 200)
-            {
-                osc1WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100))));
-            }
-            else if (osc1WtVal <= 300)
-            {
-                osc1WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200))));
-            }
-        }
+        //for (int i = 0; i < wtSize; i++)
+        //{
+        //    // Wavetable 1
+        //    if (osc1WtVal <= 100)
+        //    {
+        //        osc1WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)));
+        //    }
+        //    else if (osc1WtVal <= 200)
+        //    {
+        //        osc1WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100))));
+        //    }
+        //    else if (osc1WtVal <= 300)
+        //    {
+        //        osc1WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200))));
+        //    }
+        //}
         return osc1WaveShape;
     }
+
 
     Array<float> getOsc2WaveShape()
     {
@@ -160,38 +166,7 @@ public:
         getSampleRate();
         osc1increment = (frequency * osc1Pitch) * wtSize / sampleRate;
         osc2increment = (frequency * osc2Pitch) * wtSize / sampleRate;
-        waveTable1.clear();
         waveTable2.clear();
-
-        for (int i = 0; i < wtSize; i++)
-        {
-            // Wavetable 1
-            if (osc1WtVal <= 100)
-            {
-                waveTable1.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)) * osc1Gain);
-            }
-            else if (osc1WtVal <= 200)
-            {
-                waveTable1.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal-100))) * osc1Gain);
-            }
-            else if (osc1WtVal <= 300)
-            {
-                waveTable1.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal-200))) * osc1Gain);
-            }
-            // Wavetable 2
-            if (osc2WtVal <= 100)
-            {
-                waveTable2.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc2WtVal)) * osc2Gain);
-            }
-            else if (osc2WtVal <= 200)
-            {
-                waveTable2.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc2WtVal-100))) * osc2Gain);
-            }
-            else if (osc2WtVal <= 300)
-            {
-                waveTable2.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc2WtVal-200))) * osc2Gain);
-            }
-        }
         myADSR.noteOn();
     }
 
@@ -219,15 +194,56 @@ public:
     void getOsc1(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
         osc1Gain = Decibels::decibelsToGain(gain->load());
-        osc1WtVal.store(*wtVal);
+        
         osc1Pitch.store(*oscpitch);
+        //if (*wtVal != osc1WtVal)
+        //{
+        //    osc1WtVal.store(*wtVal);
+        //    for (int i = 0; i < wtSize; i++)
+        //    {
+        //        // Wavetable 1
+        //        if (osc1WtVal <= 100)
+        //        {
+        //            waveTable1[i] = sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal) * osc1Gain;
+        //        }
+        //        else if (osc1WtVal <= 200)
+        //        {
+        //            waveTable1[i] = triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100)) * osc1Gain;
+        //        }
+        //        else if (osc1WtVal <= 300)
+        //        {
+        //            waveTable1[i] = squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200)) * osc1Gain;
+        //        }
+        //    }
+        //    osc1BLWT = osc1WT.generateWavetable(waveTable1, wtSize);
+        //}
     }
     
     void getOsc2(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
         osc2Gain = Decibels::decibelsToGain(gain->load());
-        osc2WtVal.store(*wtVal);
+        
         osc2Pitch.store(*oscpitch);
+        if ((*wtVal).load() != osc2WtVal)
+        {
+            osc2WtVal.store(*wtVal);
+            for (int i = 0; i < wtSize; i++)
+            {
+                // Wavetable 2
+                if (osc2WtVal <= 100)
+                {
+                    waveTable2.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc2WtVal)) * osc2Gain);
+                }
+                else if (osc2WtVal <= 200)
+                {
+                    waveTable2.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc2WtVal - 100))) * osc2Gain);
+                }
+                else if (osc2WtVal <= 300)
+                {
+                    waveTable2.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc2WtVal - 200))) * osc2Gain);
+                }
+            }
+        }
     }
 
     void getMasterGain(std::atomic<float>* lastGain)
@@ -253,20 +269,10 @@ public:
         sampleRate = lastSampleRate;
     }
 
-    void getFilt1(/*float* onoff, float* filt,*/ std::atomic<float>* cutoff)
+    void getFilt1(std::atomic<float>* cutoff)
     {
-        //filt1OnOff = *onoff;
-        //filt1Filt = *filt ;
         filt1Cutoff.store(*cutoff);
     }
-    /*
-        void getFilt2(float* onoff, float* filt, std::atomic<float>* cutoff);
-    {
-        //filt1OnOff = *onoff;
-        //filt1Filt = *filt ;
-        filt2Cutoff.store(*cutoff);
-    }
-    */
     void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet, std::atomic<float>* distMethod)
     {
         dist1OnOff.store(*onoff);
@@ -301,28 +307,61 @@ public:
     {
         myADSR.setParameters(adsrParams);
 
+        //int numOverSamples = numSample * oversampVal;
+        //oversampleBuffer.setSize(2, numSample, false, true, true);
+        //downsampleBuffer.setSize(2, numSample, false, true, true);
+
         //===== MAIN AUDIO BLOCK =====//
         for (int sample = 0; sample < numSample; sample++)
         {
             for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
             {
                 //===== APPLY ADSR, VEL, Gain, Wavetable =====//
-                float nextSample = myADSR.getNextSample() * vel * masterGain * (waveTable1[(int)osc1phase] + waveTable2[(int)osc2phase]);
+                if (osc1phase < 0)
+                {
+                    osc1phase = 0;
+                }
+                //if (std::floor(osc1phase) == osc1phase)
+                //{
+                //    osc1Interp = osc1BLWT[(int)osc1phase].real();
+                //}
+                //else if (std::floor(osc1phase) == osc1BLWT.size()-1)
+                //{
+                //    osc1Interp = osc1BLWT[(int)osc1phase].real();
+                //}
+                //else
+                //{
+                //    int osc1LowPhase = std::floor(osc1phase);
+                //    int osc1HighPhase = std::ceil(osc1phase);
+                //    osc1Interp = (osc1BLWT[osc1LowPhase].real() + osc1BLWT[osc1HighPhase].real()) / 2;
+                //}
+                float nextSample = myADSR.getNextSample() * vel * masterGain * (/*osc1Interp +*/ waveTable2[(int)osc2phase]);
                 nextSample = applyDist1(nextSample);
                 nextSample = processLoFilt.process(nextSample, filt1Cutoff.load(), 0);
-                //nextSample = processHiFilt.process(nextSample, filt2Cutoff.load(), 1);
                 outputBuffer.addSample(channel, startSample, nextSample);
             }
             osc1phase = fmod((osc1phase + osc1increment), wtSize);
             osc2phase = fmod((osc2phase + osc2increment), wtSize);
             startSample++;
         }
+
+        //oversamp->processSamplesUp(oversampleBlock);
+
+        //dsp::AudioBlock<float> downsampleBlock(oversampleBuffer);
+        //oversamp->processSamplesDown(downsampleBlock);
+        //downsampleBlock.copyTo(outputBuffer);
+
+        //dsp::AudioBlock<float> blockOut = overSampling->getOverSampleBuffer(targetBlock);
+        //mWTsettings.bufferL = blockOut.getChannelPointer(0);
+        //mWTsettings.bufferR = blockOut.getChannelPointer(1);
+        //commonSoundGen(numSamples);
+        //overSampling->downSample(targetBlock);
     }
 
 private:
     // Master
     float masterGain;
-    double wtSize = 2048 * 8;
+    static const int wtSize = 4096;
 
     // MIDI note
     double frequency;
@@ -334,7 +373,9 @@ private:
     double sampleRate;
 
     // Wavetables
-    Array<float> waveTable1;
+    std::array<dsp::Complex<float>, wtSize> waveTable1;
+    std::array<dsp::Complex<float>, wtSize> osc1BLWT;
+    Wavetable osc1WT;
     Array<float> waveTable2;
     Array<float> sineTable;
     Array<float> squareTable;
@@ -351,10 +392,10 @@ private:
     std::atomic<float> osc2Gain;
     std::atomic<float> osc1Pitch;
     std::atomic<float> osc2Pitch;
+    float osc1Interp;
 
     // Filt
     std::atomic<float> filt1Cutoff;
-    //std::atomic<float> filt2Cutoff;
 
     // Dist
     std::atomic<bool> dist1OnOff;
@@ -368,5 +409,10 @@ private:
     ADSR myADSR;
     ADSR::Parameters adsrParams;
     Filtered processLoFilt;
-    //Filtered processHiFilt;
+
+    //Oversamp
+    //AudioBuffer<float> oversampleBuffer;
+    //AudioBuffer<float> downsampleBuffer;
+    //const int oversampVal = 2;
+    //dsp::Oversampling<float>* oversamp = new dsp::Oversampling<float>(2, oversampVal/2, dsp::Oversampling<float>::filterHalfBandFIREquiripple, false);
 };

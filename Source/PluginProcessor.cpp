@@ -21,7 +21,7 @@ Wsynth_v1AudioProcessor::Wsynth_v1AudioProcessor()
     )
     , tree(*this, nullptr, "PARAMETERS",
         // Processor tree for tracking GUI values
-        {    
+        {
             // ADSR
             std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
             std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.1f, 2.0f), 0.8f),
@@ -208,8 +208,6 @@ void Wsynth_v1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuff
                                         tree.getRawParameterValue("osc2pitch"));
             myVoice->getFilt1(          tree.getRawParameterValue("filt1cutoff"));
 
-            //myVoice->getFilt2(          tree.getRawParameterValue("filt2cutoff"));
-
             myVoice->getDist1(          tree.getRawParameterValue("dist1onoff"), 
                                         tree.getRawParameterValue("dist1inputgain"),
                                         tree.getRawParameterValue("dist1outputgain"), 
@@ -257,6 +255,11 @@ bool Wsynth_v1AudioProcessor::hasEditor() const
 AudioProcessorEditor* Wsynth_v1AudioProcessor::createEditor()
 {
     return new Wsynth_v1AudioProcessorEditor (*this);
+}
+
+AudioProcessorEditor* Wsynth_v1AudioProcessor::getEditor() const noexcept
+{
+    return dynamic_cast<AudioProcessorEditor*>(getActiveEditor());
 }
 
 //==============================================================================

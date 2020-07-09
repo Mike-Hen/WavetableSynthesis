@@ -9,6 +9,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 #include "OtherLookAndFeel.h"
+#include "Wavetable.h"
 
 
 class Oscillator : public Component,
@@ -26,6 +27,8 @@ public:
 
     int oscCentValueChange(String command, int centVal);
     int oscFineValueChange(String command, TextButton* cent, int* centVal, int fineVal);
+
+    //std::array<dsp::Complex<float>, 4096> osc1BLWT();
 
     // Create components objects
     Slider osc1GainSlider;
