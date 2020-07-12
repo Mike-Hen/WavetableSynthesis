@@ -30,13 +30,13 @@ public:
     float getLevelLeft();
     float getLevelRight();
 
+    OtherLookAndFeel otherLookAndFeel;
+
     Slider gainSlider;
     Label volumeLabel;
 
     Image masterLevelImageLeft;
     Image masterLevelImageRight;
-
-    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

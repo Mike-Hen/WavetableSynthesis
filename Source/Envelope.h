@@ -24,13 +24,13 @@ public:
 
     void setADSRValues(float attack, float decay, float sustain, float release);
 
+    OtherLookAndFeel otherLookAndFeel;
+
     // ADSR Sliders
     Slider attackSlider;
     Slider decaySlider;
     Slider sustainSlider;
     Slider releaseSlider;
-
-    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

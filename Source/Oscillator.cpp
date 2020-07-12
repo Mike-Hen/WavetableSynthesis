@@ -308,7 +308,7 @@ void Oscillator::paint(Graphics& g)
     for (int i = 0; i < osc1.getWidth(); i++)
     {
         int scaledIndex = float(i*osc1WaveShape.size()) / float(osc1.getWidth());
-        float val = osc1WaveShape[scaledIndex];
+        float val = -osc1WaveShape[scaledIndex];
         val = jlimit<float>(-1, 1, val);
 
         if (i == 0)
@@ -337,7 +337,7 @@ void Oscillator::paint(Graphics& g)
     for (int i = 0; i < osc2.getWidth(); i++)
     {
         int scaledIndex = float(i*osc2WaveShape.size()) / float(osc2.getWidth());
-        float val = osc2WaveShape[scaledIndex];
+        float val = -osc2WaveShape[scaledIndex];
         val = jlimit<float>(-1, 1, val);
 
         if (i == 0)

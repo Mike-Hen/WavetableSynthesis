@@ -30,6 +30,8 @@ public:
 
     //std::array<dsp::Complex<float>, 4096> osc1BLWT();
 
+    OtherLookAndFeel otherLookAndFeel;
+
     // Create components objects
     Slider osc1GainSlider;
     Slider osc2GainSlider;
@@ -61,8 +63,6 @@ public:
 
     Image osc2Image;
     ScopedPointer<Graphics> osc2Graphic;
-
-    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

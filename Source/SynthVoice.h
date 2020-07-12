@@ -21,8 +21,8 @@ class SynthVoice : public SynthesiserVoice
 public:
     SynthVoice()
     {
-        osc1WtVal.store(0);
-        osc2WtVal.store(0);
+        osc1WtVal.store(-1);
+        osc2WtVal.store(-1);
         //oversamp->initProcessing(480);
     //===== Setup Waveforms =====//
         // Sine
@@ -52,16 +52,16 @@ public:
         }
 
         // Sawtooth
-        double saw_increment = 2 / wtSize;
-        double saw_count = 0;
+        float saw_increment = 2.0f / wtSize;
+        float saw_count = 0;
         for (int i = 0; i < wtSize; i++)
         {
-            sawTable.insert(i, (2 - saw_count) - 1);
+            sawTable[i] = (2 - saw_count) - 1;
             saw_count = saw_count + saw_increment;
         }
 
         // Triangle
-        double tri_increment = 4 / wtSize;
+        double tri_increment = 4.0f / wtSize;
         double tri_count = 0;
         for (int i = 0; i < wtSize; i++)
         {
@@ -104,22 +104,22 @@ public:
     Array<float> getOsc1WaveShape()
     {
         Array<float> osc1WaveShape;
-        //for (int i = 0; i < wtSize; i++)
-        //{
-        //    // Wavetable 1
-        //    if (osc1WtVal <= 100)
-        //    {
-        //        osc1WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)));
-        //    }
-        //    else if (osc1WtVal <= 200)
-        //    {
-        //        osc1WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100))));
-        //    }
-        //    else if (osc1WtVal <= 300)
-        //    {
-        //        osc1WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200))));
-        //    }
-        //}
+        for (int i = 0; i < wtSize; i++)
+        {
+            // Wavetable 1
+            if (osc1WtVal <= 100)
+            {
+                osc1WaveShape.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal)));
+            }
+            else if (osc1WtVal <= 200)
+            {
+                osc1WaveShape.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100))));
+            }
+            else if (osc1WtVal <= 300)
+            {
+                osc1WaveShape.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200))));
+            }
+        }
         return osc1WaveShape;
     }
 
@@ -166,7 +166,8 @@ public:
         getSampleRate();
         osc1increment = (frequency * osc1Pitch) * wtSize / sampleRate;
         osc2increment = (frequency * osc2Pitch) * wtSize / sampleRate;
-        waveTable2.clear();
+        osc1BLWT = osc1WT.selectWavetable(frequency);
+        osc2BLWT = osc2WT.selectWavetable(frequency);
         myADSR.noteOn();
     }
 
@@ -194,37 +195,39 @@ public:
     void getOsc1(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
         osc1Gain = Decibels::decibelsToGain(gain->load());
-        
+        std::atomic<float> waveTable1Value;
+        waveTable1Value.store(*wtVal);
         osc1Pitch.store(*oscpitch);
-        //if (*wtVal != osc1WtVal)
-        //{
-        //    osc1WtVal.store(*wtVal);
-        //    for (int i = 0; i < wtSize; i++)
-        //    {
-        //        // Wavetable 1
-        //        if (osc1WtVal <= 100)
-        //        {
-        //            waveTable1[i] = sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal) * osc1Gain;
-        //        }
-        //        else if (osc1WtVal <= 200)
-        //        {
-        //            waveTable1[i] = triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100)) * osc1Gain;
-        //        }
-        //        else if (osc1WtVal <= 300)
-        //        {
-        //            waveTable1[i] = squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200)) * osc1Gain;
-        //        }
-        //    }
-        //    osc1BLWT = osc1WT.generateWavetable(waveTable1, wtSize);
-        //}
+        if (waveTable1Value.load() != osc1WtVal)
+        {
+            osc1WtVal.store(*wtVal);
+            for (int i = 0; i < wtSize; i++)
+            {
+                // Wavetable 1
+                if (osc1WtVal <= 100)
+                {
+                    waveTable1[i] = (sineTable[i] + ((sine2tri[i] / 100) * osc1WtVal));
+                }
+                else if (osc1WtVal <= 200)
+                {
+                    waveTable1[i] = (triTable[i] + ((tri2square[i] / 100) * (osc1WtVal - 100)));
+                }
+                else if (osc1WtVal <= 300)
+                {
+                    waveTable1[i] = (squareTable[i] + ((square2saw[i] / 100) * (osc1WtVal - 200)));
+                }
+            }
+            osc1WT.generateWavetable(waveTable1, wtSize);
+        }
     }
     
     void getOsc2(std::atomic<float>* gain, std::atomic<float>* wtVal, std::atomic<float>* oscpitch)
     {
         osc2Gain = Decibels::decibelsToGain(gain->load());
-        
+        std::atomic<float> waveTable2Value;
+        waveTable2Value.store(*wtVal);
         osc2Pitch.store(*oscpitch);
-        if ((*wtVal).load() != osc2WtVal)
+        if (waveTable2Value.load() != osc2WtVal)
         {
             osc2WtVal.store(*wtVal);
             for (int i = 0; i < wtSize; i++)
@@ -232,17 +235,18 @@ public:
                 // Wavetable 2
                 if (osc2WtVal <= 100)
                 {
-                    waveTable2.insert(i, (sineTable[i] + ((sine2tri[i] / 100) * osc2WtVal)) * osc2Gain);
+                    waveTable2[i] = (sineTable[i] + ((sine2tri[i] / 100) * osc2WtVal));
                 }
                 else if (osc2WtVal <= 200)
                 {
-                    waveTable2.insert(i, (triTable[i] + ((tri2square[i] / 100) * (osc2WtVal - 100))) * osc2Gain);
+                    waveTable2[i] = (triTable[i] + ((tri2square[i] / 100) * (osc2WtVal - 100)));
                 }
                 else if (osc2WtVal <= 300)
                 {
-                    waveTable2.insert(i, (squareTable[i] + ((square2saw[i] / 100) * (osc2WtVal - 200))) * osc2Gain);
+                    waveTable2[i] = (squareTable[i] + ((square2saw[i] / 100) * (osc2WtVal - 200)));
                 }
             }
+            osc2WT.generateWavetable(waveTable2, wtSize);
         }
     }
 
@@ -273,9 +277,9 @@ public:
     {
         filt1Cutoff.store(*cutoff);
     }
-    void getDist1(std::atomic<float>* onoff, std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet, std::atomic<float>* distMethod)
+    void getDist1(/*std::atomic<float>* onoff,*/ std::atomic<float>* inputGain, std::atomic<float>* outputGain, std::atomic<float>* drywet, std::atomic<float>* distMethod)
     {
-        dist1OnOff.store(*onoff);
+        //dist1OnOff.store(*onoff);
         dist1Method.store(*distMethod);
         dist1InputGain.store(Decibels::decibelsToGain(inputGain->load()));
         dist1OutputGain.store(Decibels::decibelsToGain(outputGain->load()));
@@ -321,30 +325,50 @@ public:
                 {
                     osc1phase = 0;
                 }
-                //if (std::floor(osc1phase) == osc1phase)
-                //{
-                //    osc1Interp = osc1BLWT[(int)osc1phase].real();
-                //}
-                //else if (std::floor(osc1phase) == osc1BLWT.size()-1)
-                //{
-                //    osc1Interp = osc1BLWT[(int)osc1phase].real();
-                //}
-                //else
-                //{
-                //    int osc1LowPhase = std::floor(osc1phase);
-                //    int osc1HighPhase = std::ceil(osc1phase);
-                //    osc1Interp = (osc1BLWT[osc1LowPhase].real() + osc1BLWT[osc1HighPhase].real()) / 2;
-                //}
-                float nextSample = myADSR.getNextSample() * vel * masterGain * (/*osc1Interp +*/ waveTable2[(int)osc2phase]);
+                if (osc2phase < 0)
+                {
+                    osc2phase = 0;
+                }
+                if (std::floor(osc1phase) == osc1phase)
+                {
+                    osc1Interp = osc1BLWT[(int)osc1phase].real();
+                }
+                else if (std::floor(osc1phase) == osc1BLWT.size()-1)
+                {
+                    osc1Interp = osc1BLWT[(int)osc1phase].real();
+                }
+                else
+                {
+                    int osc1LowPhase = std::floor(osc1phase);
+                    int osc1HighPhase = std::ceil(osc1phase);
+                    osc1Interp = (osc1BLWT[osc1LowPhase].real() + osc1BLWT[osc1HighPhase].real()) / 2;
+                }
+
+                if (std::floor(osc2phase) == osc2phase)
+                {
+                    osc2Interp = osc2BLWT[(int)osc2phase].real();
+                }
+                else if (std::floor(osc2phase) == osc2BLWT.size() - 1)
+                {
+                    osc2Interp = osc2BLWT[(int)osc2phase].real();
+                }
+                else
+                {
+                    int osc2LowPhase = std::floor(osc2phase);
+                    int osc2HighPhase = std::ceil(osc2phase);
+                    osc2Interp = (osc2BLWT[osc2LowPhase].real() + osc2BLWT[osc2HighPhase].real()) / 2;
+                }
+                float nextSample = myADSR.getNextSample() * vel * masterGain * ((osc1Interp * osc1Gain) + (osc2Interp * osc2Gain));
                 nextSample = applyDist1(nextSample);
                 nextSample = processLoFilt.process(nextSample, filt1Cutoff.load(), 0);
-                outputBuffer.addSample(channel, startSample, nextSample);
+                outputBuffer.addSample(channel, sample, nextSample);
             }
             osc1phase = fmod((osc1phase + osc1increment), wtSize);
             osc2phase = fmod((osc2phase + osc2increment), wtSize);
             startSample++;
         }
 
+        //dsp::AudioBlock<float> oversampleBlock(oversampleBuffer);
         //oversamp->processSamplesUp(oversampleBlock);
 
         //dsp::AudioBlock<float> downsampleBlock(oversampleBuffer);
@@ -376,10 +400,12 @@ private:
     std::array<dsp::Complex<float>, wtSize> waveTable1;
     std::array<dsp::Complex<float>, wtSize> osc1BLWT;
     Wavetable osc1WT;
-    Array<float> waveTable2;
+    std::array<dsp::Complex<float>, wtSize> waveTable2;
+    std::array<dsp::Complex<float>, wtSize> osc2BLWT;
+    Wavetable osc2WT;
     Array<float> sineTable;
     Array<float> squareTable;
-    Array<float> sawTable;
+    std::array<float, 4096> sawTable;
     Array<float> triTable;
     Array<float> sine2tri;
     Array<float> tri2square;
@@ -393,6 +419,7 @@ private:
     std::atomic<float> osc1Pitch;
     std::atomic<float> osc2Pitch;
     float osc1Interp;
+    float osc2Interp;
 
     // Filt
     std::atomic<float> filt1Cutoff;

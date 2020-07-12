@@ -23,11 +23,12 @@ public:
 
     void buttonClicked(Button* button) override;
 
+    OtherLookAndFeel otherLookAndFeel;
+
     // Create components objects
     Slider cutoffSlider;
     ComboBox filterSelect;
     TextButton filtOnOff;
-    OtherLookAndFeel otherLookAndFeel;
 
 private:
     Wsynth_v1AudioProcessor& processor;

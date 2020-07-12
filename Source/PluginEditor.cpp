@@ -95,13 +95,12 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
     releaseVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "release", envGui.releaseSlider);
     
     // Filters
-    filt1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "filt1onoff", filt1.filtOnOff);
-    filt1Val = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "filt1", filt1.filterSelect);
+    //filt1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "filt1onoff", filt1.filtOnOff);
+    //filt1Val = new AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "filt1", filt1.filterSelect);
     filt1CutoffVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "filt1cutoff", filt1.cutoffSlider);
-    //filt2CutoffVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "filt2cutoff", filt2.cutoffSlider);
     
     // Distortion
-    dist1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "dist1onoff", dist1.distOnOff);
+    //dist1OnOffVal = new AudioProcessorValueTreeState::ButtonAttachment(processor.tree, "dist1onoff", dist1.distOnOff);
     dist1InputGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1inputgain", dist1.inputGainSlider);
     dist1OutputGainVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1outputgain", dist1.outputGainSlider);
     dist1DryWetVal = new AudioProcessorValueTreeState::SliderAttachment(processor.tree, "dist1drywet", dist1.dryWetSlider);
@@ -110,6 +109,7 @@ Wsynth_v1AudioProcessorEditor::Wsynth_v1AudioProcessorEditor (Wsynth_v1AudioProc
 
 Wsynth_v1AudioProcessorEditor::~Wsynth_v1AudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==== Tracking ADSR preset buttons ====//

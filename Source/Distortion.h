@@ -26,6 +26,8 @@ public:
     void sliderValueChanged(Slider* slider) override;
     Array<float> getDistortionCurve(int distLength);
 
+    OtherLookAndFeel otherLookAndFeel;
+
     // Create component objects
     Slider inputGainSlider;
     Slider outputGainSlider;
@@ -35,9 +37,6 @@ public:
 
     Image distortionImage;
     ScopedPointer<Graphics> distortionGraphic;
-
-    OtherLookAndFeel otherLookAndFeel;
-
 private:
     Wsynth_v1AudioProcessor& processor;
 
